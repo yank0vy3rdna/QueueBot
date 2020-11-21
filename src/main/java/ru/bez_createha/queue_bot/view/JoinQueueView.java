@@ -1,5 +1,6 @@
 package ru.bez_createha.queue_bot.view;
 
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -10,6 +11,7 @@ import ru.bez_createha.queue_bot.services.QueueService;
 
 import java.util.function.Predicate;
 
+@Component
 public class JoinQueueView implements CallbackCommand {
     private final QueueService queueService;
 

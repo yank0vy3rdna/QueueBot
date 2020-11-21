@@ -20,7 +20,7 @@ public class Queue extends IdBaseEntity {
     @Enumerated(EnumType.STRING)
     private QueueStatus status;
 
-    @ManyToMany()
+    @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(name = "queue_users",
             joinColumns = @JoinColumn(name = "id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
