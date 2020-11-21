@@ -1,11 +1,9 @@
 package ru.bez_createha.queue_bot.context;
 
-import lombok.Data;
 import org.springframework.stereotype.Component;
 import ru.bez_createha.queue_bot.utils.InlineButton;
 import ru.bez_createha.queue_bot.view.createQueue.SimpleCalendar;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.HashMap;
 import java.util.Map;
 

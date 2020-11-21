@@ -9,4 +9,5 @@ import java.util.List;
 public interface QueueService {
     List<Queue> findByGroupId(Group groupId);
     List<Queue> findAllByStatus(QueueStatus status);
+    void save(Queue queue);
 }

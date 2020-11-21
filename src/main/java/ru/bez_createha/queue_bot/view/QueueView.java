@@ -1,5 +1,6 @@
 package ru.bez_createha.queue_bot.view;
 
+import ru.bez_createha.queue_bot.context.UserContext;
 import ru.bez_createha.queue_bot.model.Group;
 import ru.bez_createha.queue_bot.model.Queue;
 import ru.bez_createha.queue_bot.model.State;
@@ -26,11 +27,13 @@ public class QueueView implements CallbackCommand{
     private final InlineButton telegramUtil;
     private final QueueService queueService;
     private final GroupService groupService;
+    private final UserContext userContext;
 
-    public QueueView(InlineButton telegramUtil, QueueService queueService, GroupService groupService) {
+    public QueueView(InlineButton telegramUtil, QueueService queueService, GroupService groupService, UserContext userContext) {
         this.telegramUtil = telegramUtil;
         this.queueService = queueService;
         this.groupService = groupService;
+        this.userContext = userContext;
     }
 
     @Override
@@ -47,6 +50,7 @@ public class QueueView implements CallbackCommand{
 
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         Group group = groupService.findById(Long.valueOf(callbackQuery.getData().split("::")[1]));
+        userContext.getUserStaff(user.getUserId()).setGroup(group);
 
         user.setMessageId(callbackQuery.getMessage().getMessageId());
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();

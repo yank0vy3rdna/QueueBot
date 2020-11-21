@@ -40,6 +40,7 @@ public class SchedulerService {
         JobDataMap jobDataMap = new JobDataMap();
         jobDataMap.put("queue", queue);
         jobDataMap.put("bot", bot);
+        jobDataMap.put("queue_service", queueService);
         JobDetail jobDetail = JobBuilder
                 .newJob(StartQueueJob.class)
                 .withIdentity(queue.getId().toString())

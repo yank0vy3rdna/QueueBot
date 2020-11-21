@@ -28,4 +28,9 @@ public class QueueServiceImpl implements QueueService {
     public List<Queue> findAllByStatus(QueueStatus status) {
         return queueRepository.findAllByStatus(status);
     }
+
+    @Override
+    public void save(Queue queue) {
+        queueRepository.save(queue);
+    }
 }

@@ -38,6 +38,8 @@ public class SaveDate implements CallbackCommand{
 
     @Override
     public List<BotApiMethod<? extends Serializable>> process(CallbackQuery callbackQuery, User user) {
+        user.setBotState(State.ENTER_QUEUE_TIME.toString());
+        user.setMessageId(callbackQuery.getMessage().getMessageId());
 
         List<BotApiMethod<? extends Serializable>> methods = new ArrayList<>();
         userContext.getUserStaff(user.getUserId()).getRawQueue().setDay_start(Integer.valueOf(callbackQuery.getData().split("::")[1].split("/")[0]));
@@ -48,7 +50,7 @@ public class SaveDate implements CallbackCommand{
         EditMessageText editMessageText = new EditMessageText();
         editMessageText.setMessageId(user.getMessageId());
         editMessageText.setChatId(callbackQuery.getMessage().getChatId().toString());
-        editMessageText.setText("Выберите время начала.\n Для этого напишите в чат время в формате Часы:Минуты");
+        editMessageText.setText("Выберите время начала.\n Для этого напишите в чат время в формате HH:mm");
 
         methods.add(editMessageText);
         return methods;
