@@ -1,5 +1,6 @@
 package ru.bez_createha.queue_bot.view;
 
+import org.springframework.transaction.annotation.Transactional;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.bez_createha.queue_bot.Bot;
 import ru.bez_createha.queue_bot.model.Group;

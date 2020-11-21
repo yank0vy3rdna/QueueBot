@@ -1,6 +1,7 @@
 package ru.bez_createha.queue_bot.model;
 
 import lombok.Data;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -20,13 +21,13 @@ public class Queue extends IdBaseEntity {
     @Enumerated(EnumType.STRING)
     private QueueStatus status;
 
-    @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(name = "queue_users",
             joinColumns = @JoinColumn(name = "id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> queue_users;
 
-    @ManyToOne(cascade = { CascadeType.MERGE },fetch = FetchType.EAGER)
+    @ManyToOne(cascade = { CascadeType.MERGE }, fetch = FetchType.EAGER)
     @JoinColumn(name = "group_id", referencedColumnName = "id")
     private Group groupId;
 
