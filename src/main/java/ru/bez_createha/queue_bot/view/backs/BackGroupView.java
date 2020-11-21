@@ -1,5 +1,7 @@
 package ru.bez_createha.queue_bot.view.backs;
 
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import ru.bez_createha.queue_bot.Bot;
 import ru.bez_createha.queue_bot.model.State;
 import ru.bez_createha.queue_bot.model.User;
 import ru.bez_createha.queue_bot.view.GroupView;
@@ -26,12 +28,11 @@ public class BackGroupView implements Back{
     }
 
     @Override
-    public List<BotApiMethod<? extends Serializable>> process(CallbackQuery callbackQuery, User user) {
-        List<BotApiMethod<? extends Serializable>> methods = groupView.process(callbackQuery.getMessage(), user);
+    public void process(CallbackQuery callbackQuery, User user, Bot bot) throws TelegramApiException {
+        groupView.process(callbackQuery.getMessage(), user, bot);
         DeleteMessage deleteMessage = new DeleteMessage();
         deleteMessage.setChatId(callbackQuery.getMessage().getChatId().toString());
         deleteMessage.setMessageId(callbackQuery.getMessage().getMessageId());
-        methods.add(deleteMessage);
-        return methods;
+        bot.execute(deleteMessage);
     }
 }

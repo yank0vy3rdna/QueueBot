@@ -1,5 +1,6 @@
 package ru.bez_createha.queue_bot.controller;
 
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.bez_createha.queue_bot.Bot;
 import ru.bez_createha.queue_bot.context.UserContext;
 import ru.bez_createha.queue_bot.model.User;
@@ -36,14 +37,14 @@ public class TelegramController {
         messageInvoker.register(command);
     }
 
-    public void onCallbackQuery(CallbackQuery callbackQuery, Bot bot) {
+    public void onCallbackQuery(CallbackQuery callbackQuery, Bot bot) throws TelegramApiException {
         User user = userService.findByUserId(callbackQuery.getFrom());
         userContext.initUser(user.getUserId());
         callbackInvoker.process(callbackQuery, user, bot);
         userService.saveUser(user);
     }
 
-    public void onMessage(Message message, Bot bot) {
+    public void onMessage(Message message, Bot bot) throws TelegramApiException {
         User user = userService.findByUserId(message.getFrom());
         messageInvoker.process(message, user, bot);
         userService.saveUser(user);

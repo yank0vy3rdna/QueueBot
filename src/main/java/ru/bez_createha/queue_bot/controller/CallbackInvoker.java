@@ -1,5 +1,6 @@
 package ru.bez_createha.queue_bot.controller;
 
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.bez_createha.queue_bot.Bot;
 import ru.bez_createha.queue_bot.model.User;
 import ru.bez_createha.queue_bot.view.CallbackCommand;
@@ -23,7 +24,7 @@ public class CallbackInvoker {
         commands.add(command);
     }
 
-    public void process(CallbackQuery callbackQuery, User user, Bot bot) {
+    public void process(CallbackQuery callbackQuery, User user, Bot bot) throws TelegramApiException {
         for (CallbackCommand command : commands) {
             if(command.statePredicate().test(user.getBotState()) && command.callbackPredicate().test(callbackQuery)){
                 command.process(callbackQuery, user, bot);

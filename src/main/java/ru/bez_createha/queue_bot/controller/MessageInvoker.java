@@ -1,5 +1,6 @@
 package ru.bez_createha.queue_bot.controller;
 
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.bez_createha.queue_bot.Bot;
 import ru.bez_createha.queue_bot.model.User;
 import ru.bez_createha.queue_bot.view.MessageCommand;
@@ -26,7 +27,7 @@ public class MessageInvoker {
         commands.add(command);
     }
 
-    public void process(Message message, User user, Bot bot) {
+    public void process(Message message, User user, Bot bot) throws TelegramApiException {
         for (MessageCommand command : commands) {
             if(command.statePredicate().test(user.getBotState()) && command.messagePredicate().test(message)){
                 command.process(message, user, bot);
