@@ -30,6 +30,11 @@ public class QueueServiceImpl implements QueueService {
     }
 
     @Override
+    public Queue getById(Long queue_id) {
+        return queueRepository.getOne(queue_id);
+    }
+
+    @Override
     public void save(Queue queue) {
         queueRepository.save(queue);
     }

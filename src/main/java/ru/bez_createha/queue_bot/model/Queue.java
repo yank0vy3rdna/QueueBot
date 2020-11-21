@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Data
@@ -18,6 +19,12 @@ public class Queue extends IdBaseEntity {
 
     @Enumerated(EnumType.STRING)
     private QueueStatus status;
+
+    @ManyToMany()
+    @JoinTable(name = "queue_users",
+            joinColumns = @JoinColumn(name = "id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private List<User> queue_users;
 
     @ManyToOne
     @JoinColumn(name = "group_id", referencedColumnName = "id")

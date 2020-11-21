@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Data
@@ -19,5 +20,8 @@ public class User extends TgUserBaseEntity{
     private String botState;
     @Column(name = "message_id")
     private Integer messageId;
+
+    @ManyToMany(mappedBy = "queue_users")
+    List<Queue> likes;
 
 }

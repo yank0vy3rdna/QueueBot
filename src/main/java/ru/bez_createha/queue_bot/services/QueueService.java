@@ -9,5 +9,6 @@ import java.util.List;
 public interface QueueService {
     List<Queue> findByGroupId(Group groupId);
     List<Queue> findAllByStatus(QueueStatus status);
+    Queue getById(Long queue_id);
     void save(Queue queue);
 }
