@@ -48,6 +48,7 @@ public class QueueView implements CallbackCommand{
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         Group group = groupService.findById(Long.valueOf(callbackQuery.getData().split("::")[1]));
 
+        user.setMessageId(callbackQuery.getMessage().getMessageId());
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         List<Queue> queues = queueService.findByGroupId(group);
         List<InlineKeyboardButton> inlineKeyboardButtonsRow = new ArrayList<>();
