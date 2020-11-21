@@ -5,4 +5,5 @@ public enum State {
     QUEUE_MENU,
     ENTER_QUEUE_NAME,
     ENTER_QUEUE_DATE,
+    ENTER_QUEUE_TIME,
 }

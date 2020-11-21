@@ -1,5 +1,6 @@
 package ru.bez_createha.queue_bot.view;
 
+import ru.bez_createha.queue_bot.context.UserContext;
 import ru.bez_createha.queue_bot.model.Group;
 import ru.bez_createha.queue_bot.model.State;
 import ru.bez_createha.queue_bot.model.User;
@@ -23,10 +24,12 @@ public class GroupView implements MessageCommand {
 
     private final InlineButton telegramUtil;
     private final GroupService groupService;
+    private final UserContext userContext;
 
-    public GroupView(InlineButton telegramUtil, GroupService groupService) {
+    public GroupView(InlineButton telegramUtil, GroupService groupService, UserContext userContext) {
         this.telegramUtil = telegramUtil;
         this.groupService = groupService;
+        this.userContext = userContext;
     }
 
     @Override
@@ -40,6 +43,9 @@ public class GroupView implements MessageCommand {
     }
 
     public List<BotApiMethod<? extends Serializable>> process(Message message, User user) {
+
+
+        userContext.clearContext(user.getUserId());
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         List<Group> groups = groupService.findAllByAdmin(user);
