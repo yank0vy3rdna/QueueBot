@@ -1,5 +1,7 @@
 package ru.bez_createha.queue_bot.view;
 
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import ru.bez_createha.queue_bot.Bot;
 import ru.bez_createha.queue_bot.context.UserContext;
 import ru.bez_createha.queue_bot.model.Group;
 import ru.bez_createha.queue_bot.model.State;
@@ -42,7 +44,7 @@ public class GroupView implements MessageCommand {
         return message -> message.getText().equals("/start");
     }
 
-    public List<BotApiMethod<? extends Serializable>> process(Message message, User user) {
+    public void process(Message message, User user, Bot bot) throws TelegramApiException {
 
 
         userContext.clearContext(user.getUserId());
@@ -79,8 +81,6 @@ public class GroupView implements MessageCommand {
             sendMessage.setText("Привет! Я бот для очередей. Ниже - список твоих групп. Нажми на них, чтобы открыть меню.\n\nby @yank0vy3rdna, @qaralle, @user38h23");
         }
         sendMessage.setReplyMarkup(inlineKeyboardMarkup);
-        List<BotApiMethod<? extends Serializable>> methods = new ArrayList<>();
-        methods.add(sendMessage);
-        return methods;
+        bot.execute(sendMessage);
     }
 }

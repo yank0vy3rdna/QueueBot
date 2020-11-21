@@ -1,5 +1,6 @@
 package ru.bez_createha.queue_bot.controller;
 
+import ru.bez_createha.queue_bot.Bot;
 import ru.bez_createha.queue_bot.context.UserContext;
 import ru.bez_createha.queue_bot.model.User;
 import ru.bez_createha.queue_bot.services.UserService;
@@ -35,18 +36,16 @@ public class TelegramController {
         messageInvoker.register(command);
     }
 
-    public List<BotApiMethod<? extends Serializable>> onCallbackQuery(CallbackQuery callbackQuery) {
+    public void onCallbackQuery(CallbackQuery callbackQuery, Bot bot) {
         User user = userService.findByUserId(callbackQuery.getFrom());
         userContext.initUser(user.getUserId());
-        List<BotApiMethod<? extends Serializable>> methods = callbackInvoker.process(callbackQuery, user);
+        callbackInvoker.process(callbackQuery, user, bot);
         userService.saveUser(user);
-        return methods;
     }
 
-    public List<BotApiMethod<? extends Serializable>> onMessage(Message message) {
+    public void onMessage(Message message, Bot bot) {
         User user = userService.findByUserId(message.getFrom());
-        List<BotApiMethod<? extends Serializable>> methods = messageInvoker.process(message, user);
+        messageInvoker.process(message, user, bot);
         userService.saveUser(user);
-        return methods;
     }
 }

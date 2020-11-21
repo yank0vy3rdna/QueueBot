@@ -1,5 +1,6 @@
 package ru.bez_createha.queue_bot.controller;
 
+import ru.bez_createha.queue_bot.Bot;
 import ru.bez_createha.queue_bot.model.User;
 import ru.bez_createha.queue_bot.view.CallbackCommand;
 import org.springframework.stereotype.Controller;
@@ -22,12 +23,11 @@ public class CallbackInvoker {
         commands.add(command);
     }
 
-    public List<BotApiMethod<? extends Serializable>> process(CallbackQuery callbackQuery, User user) {
+    public void process(CallbackQuery callbackQuery, User user, Bot bot) {
         for (CallbackCommand command : commands) {
             if(command.statePredicate().test(user.getBotState()) && command.callbackPredicate().test(callbackQuery)){
-                return command.process(callbackQuery, user);
+                command.process(callbackQuery, user, bot);
             }
         }
-        return null;
     }
 }

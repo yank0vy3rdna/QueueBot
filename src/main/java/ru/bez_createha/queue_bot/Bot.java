@@ -41,20 +41,10 @@ public class Bot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        List<BotApiMethod<? extends Serializable>> methods = null;
         if (update.hasCallbackQuery()) {
-            methods = telegramController.onCallbackQuery(update.getCallbackQuery());
+            telegramController.onCallbackQuery(update.getCallbackQuery(), this);
         } else if (update.hasMessage()) {
-            methods = telegramController.onMessage(update.getMessage());
-        }
-        if (methods != null) {
-            try {
-                for (BotApiMethod<? extends Serializable> method : methods) {
-                    execute(method);
-                }
-            } catch (TelegramApiException e) {
-                e.printStackTrace();
-            }
+            telegramController.onMessage(update.getMessage(), this);
         }
     }
 }

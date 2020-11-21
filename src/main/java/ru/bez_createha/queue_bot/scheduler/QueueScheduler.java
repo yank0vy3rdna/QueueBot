@@ -9,17 +9,15 @@ import java.time.Clock;
 import java.util.Timer;
 
 @Component
-public class QueueSchedular {
+public class QueueScheduler {
 
-    private final Bot bot;
     private final QueueService queueService;
 
-    public QueueSchedular(Bot bot, QueueService queueService) {
-        this.bot = bot;
+    public QueueScheduler(QueueService queueService) {
         this.queueService = queueService;
     }
 
-    public void createJob(Queue queue) {
+    public void createJob(Queue queue, Bot bot) {
         ScheduledJob scheduledJob = new ScheduledJob(bot);
         long initialDelay = queue.getStartTime().getTime() - Clock.systemDefaultZone().millis();
 

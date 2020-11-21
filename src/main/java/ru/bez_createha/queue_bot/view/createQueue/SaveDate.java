@@ -5,6 +5,8 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import ru.bez_createha.queue_bot.Bot;
 import ru.bez_createha.queue_bot.context.UserContext;
 import ru.bez_createha.queue_bot.model.State;
 import ru.bez_createha.queue_bot.model.User;
@@ -37,11 +39,10 @@ public class SaveDate implements CallbackCommand{
     }
 
     @Override
-    public List<BotApiMethod<? extends Serializable>> process(CallbackQuery callbackQuery, User user) {
+    public void process(CallbackQuery callbackQuery, User user, Bot bot) throws TelegramApiException {
         user.setBotState(State.ENTER_QUEUE_TIME.toString());
         user.setMessageId(callbackQuery.getMessage().getMessageId());
 
-        List<BotApiMethod<? extends Serializable>> methods = new ArrayList<>();
         userContext.getUserStaff(user.getUserId()).getRawQueue().setDay_start(Integer.valueOf(callbackQuery.getData().split("::")[1].split("/")[0]));
         userContext.getUserStaff(user.getUserId()).getRawQueue().setMonth_start(Integer.valueOf(callbackQuery.getData().split("::")[1].split("/")[1]));
         userContext.getUserStaff(user.getUserId()).getRawQueue().setYear_start(Integer.valueOf(callbackQuery.getData().split("::")[1].split("/")[2]));
@@ -51,8 +52,6 @@ public class SaveDate implements CallbackCommand{
         editMessageText.setMessageId(user.getMessageId());
         editMessageText.setChatId(callbackQuery.getMessage().getChatId().toString());
         editMessageText.setText("Выберите время начала.\n Для этого напишите в чат время в формате HH:mm");
-
-        methods.add(editMessageText);
-        return methods;
+        bot.execute(editMessageText);
     }
 }

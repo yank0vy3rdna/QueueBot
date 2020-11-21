@@ -1,5 +1,6 @@
 package ru.bez_createha.queue_bot.controller;
 
+import ru.bez_createha.queue_bot.Bot;
 import ru.bez_createha.queue_bot.model.User;
 import ru.bez_createha.queue_bot.view.MessageCommand;
 import ru.bez_createha.queue_bot.view.GroupView;
@@ -25,12 +26,12 @@ public class MessageInvoker {
         commands.add(command);
     }
 
-    public List<BotApiMethod<? extends Serializable>> process(Message message, User user) {
+    public void process(Message message, User user, Bot bot) {
         for (MessageCommand command : commands) {
             if(command.statePredicate().test(user.getBotState()) && command.messagePredicate().test(message)){
-                return command.process(message, user);
+                command.process(message, user, bot);
             }
         }
-        return groupView.process(message, user);
+        groupView.process(message, user, bot);
     }
 }

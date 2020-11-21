@@ -1,5 +1,7 @@
 package ru.bez_createha.queue_bot.view;
 
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import ru.bez_createha.queue_bot.Bot;
 import ru.bez_createha.queue_bot.context.UserContext;
 import ru.bez_createha.queue_bot.model.Group;
 import ru.bez_createha.queue_bot.model.Queue;
@@ -23,7 +25,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 @Component
-public class QueueView implements CallbackCommand{
+public class QueueView implements CallbackCommand {
     private final InlineButton telegramUtil;
     private final QueueService queueService;
     private final GroupService groupService;
@@ -46,7 +48,7 @@ public class QueueView implements CallbackCommand{
         return callbackQuery -> callbackQuery.getData().split("::")[0].equals("group");
     }
 
-    public List<BotApiMethod<? extends Serializable>> process(CallbackQuery callbackQuery, User user) {
+    public void process(CallbackQuery callbackQuery, User user, Bot bot) throws TelegramApiException {
 
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         Group group = groupService.findByChatId(Long.valueOf(callbackQuery.getData().split("::")[1]));
@@ -69,11 +71,11 @@ public class QueueView implements CallbackCommand{
                 inlineKeyboardButtonsRow = new ArrayList<>();
             }
         }
-        keyboard.add(Collections.singletonList( telegramUtil.createInlineKeyboardButton(
+        keyboard.add(Collections.singletonList(telegramUtil.createInlineKeyboardButton(
                 "Создать очередь",
                 "create_queue"
         )));
-        keyboard.add(Collections.singletonList( telegramUtil.createInlineKeyboardButton(
+        keyboard.add(Collections.singletonList(telegramUtil.createInlineKeyboardButton(
                 "Назад",
                 "back"
         )));
@@ -86,12 +88,10 @@ public class QueueView implements CallbackCommand{
         if (queues.isEmpty()) {
             editMessageText.setText("Очередей пока нет! Но Вы всегда можете их добавить");
         } else {
-            editMessageText.setText("Это список очередей для вашей группы с названием: "+group.getName());
+            editMessageText.setText("Это список очередей для вашей группы с названием: " + group.getName());
         }
         editMessageText.setReplyMarkup(inlineKeyboardMarkup);
-        List<BotApiMethod<? extends Serializable>> methods = new ArrayList<>();
-        methods.add(editMessageText);
-        return methods;
+        bot.execute(editMessageText);
     }
 
 

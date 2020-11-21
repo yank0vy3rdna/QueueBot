@@ -1,5 +1,7 @@
 package ru.bez_createha.queue_bot.view.createQueue;
 
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import ru.bez_createha.queue_bot.Bot;
 import ru.bez_createha.queue_bot.model.State;
 import ru.bez_createha.queue_bot.model.User;
 import ru.bez_createha.queue_bot.utils.InlineButton;
@@ -35,9 +37,8 @@ public class StepOneView implements CallbackCommand {
         return callbackQuery -> callbackQuery.getData().split("::")[0].equals("create_queue");
     }
 
-    public List<BotApiMethod<? extends Serializable>> process(CallbackQuery callbackQuery, User user) {
+    public void process(CallbackQuery callbackQuery, User user, Bot bot) throws TelegramApiException {
         user.setBotState(State.ENTER_QUEUE_NAME.toString());
-        List<BotApiMethod<? extends Serializable>> methods = new ArrayList<>();
         user.setMessageId(callbackQuery.getMessage().getMessageId());
         EditMessageText editMessageText = new EditMessageText();
         editMessageText.setChatId(callbackQuery.getMessage().getChatId().toString());
@@ -53,7 +54,6 @@ public class StepOneView implements CallbackCommand {
         )));
         inlineKeyboardMarkup.setKeyboard(keyboard);
         editMessageText.setReplyMarkup(inlineKeyboardMarkup);
-        methods.add(editMessageText);
-        return methods;
+        bot.execute(editMessageText);
     }
 }

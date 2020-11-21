@@ -1,6 +1,5 @@
 package ru.bez_createha.queue_bot.view.createQueue;
 
-import org.quartz.SchedulerException;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
@@ -8,13 +7,15 @@ import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageTe
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import ru.bez_createha.queue_bot.Bot;
 import ru.bez_createha.queue_bot.context.RawQueue;
 import ru.bez_createha.queue_bot.context.UserContext;
 import ru.bez_createha.queue_bot.model.Queue;
 import ru.bez_createha.queue_bot.model.QueueStatus;
 import ru.bez_createha.queue_bot.model.State;
 import ru.bez_createha.queue_bot.model.User;
-import ru.bez_createha.queue_bot.scheduler.QueueSchedular;
+import ru.bez_createha.queue_bot.scheduler.QueueScheduler;
 import ru.bez_createha.queue_bot.services.QueueService;
 import ru.bez_createha.queue_bot.utils.InlineButton;
 import ru.bez_createha.queue_bot.view.MessageCommand;
@@ -33,14 +34,14 @@ public class SaveTime implements MessageCommand {
     private final UserContext userContext;
     private final QueueService queueService;
     private final InlineButton telegramUtil;
-    private final QueueSchedular queueSchedular;
+    private final QueueScheduler queueScheduler;
 
 
-    public SaveTime(UserContext userContext, QueueService queueService, InlineButton telegramUtil, QueueSchedular queueSchedular) {
+    public SaveTime(UserContext userContext, QueueService queueService, InlineButton telegramUtil, QueueScheduler queueScheduler) {
         this.userContext = userContext;
         this.queueService = queueService;
         this.telegramUtil = telegramUtil;
-        this.queueSchedular = queueSchedular;
+        this.queueScheduler = queueScheduler;
     }
 
     @Override
@@ -54,8 +55,7 @@ public class SaveTime implements MessageCommand {
     }
 
     @Override
-    public List<BotApiMethod<? extends Serializable>> process(Message message, User user) {
-        List<BotApiMethod<? extends Serializable>> methods = new ArrayList<>();
+    public void process(Message message, User user, Bot bot) throws TelegramApiException {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
         EditMessageText editMessageText = new EditMessageText();
         editMessageText.setMessageId(user.getMessageId());
@@ -77,15 +77,15 @@ public class SaveTime implements MessageCommand {
             InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
 
             List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
-            keyboard.add(Collections.singletonList( telegramUtil.createInlineKeyboardButton(
+            keyboard.add(Collections.singletonList(telegramUtil.createInlineKeyboardButton(
                     "Назад",
                     "back"
             )));
             inlineKeyboardMarkup.setKeyboard(keyboard);
             editMessageText.setReplyMarkup(inlineKeyboardMarkup);
 //            try {
-                queueSchedular.createJob(queue);
-                editMessageText.setText("Очередь создана");
+            queueScheduler.createJob(queue, bot);
+            editMessageText.setText("Очередь создана");
 //            } catch (SchedulerException e) {
 //                //
 //                editMessageText.setText("Матовый");
@@ -96,8 +96,7 @@ public class SaveTime implements MessageCommand {
         DeleteMessage deleteMessage = new DeleteMessage();
         deleteMessage.setChatId(message.getChatId().toString());
         deleteMessage.setMessageId(message.getMessageId());
-        methods.add(editMessageText);
-        methods.add(deleteMessage);
-        return methods;
+        bot.execute(editMessageText);
+        bot.execute(deleteMessage);
     }
 }

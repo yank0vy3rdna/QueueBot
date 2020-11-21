@@ -1,6 +1,8 @@
 package ru.bez_createha.queue_bot.view.createQueue;
 
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import ru.bez_createha.queue_bot.Bot;
 import ru.bez_createha.queue_bot.context.RawQueue;
 import ru.bez_createha.queue_bot.context.UserContext;
 import ru.bez_createha.queue_bot.model.State;
@@ -36,7 +38,7 @@ public class StepTwoView implements MessageCommand {
         return message -> true;
     }
 
-    public List<BotApiMethod<? extends Serializable>> process(Message message, User user) {
+    public void process(Message message, User user, Bot bot) throws TelegramApiException {
         String QUEUE_NAME = message.getText();
 
         SimpleCalendar simpleCalendar = userContext.getUserStaff(user.getUserId()).getSimpleCalendar();
@@ -52,14 +54,14 @@ public class StepTwoView implements MessageCommand {
         EditMessageText editMessageText = new EditMessageText();
         editMessageText.setMessageId(user.getMessageId());
         editMessageText.setChatId(message.getChatId().toString());
-        editMessageText.setText("Вы успешно создали очередь с именем: "+QUEUE_NAME+"\nТеперь нужно выбрать дату и время начала очереди");
+        editMessageText.setText("Вы успешно создали очередь с именем: " + QUEUE_NAME + "\nТеперь нужно выбрать дату и время начала очереди");
         editMessageText.setReplyMarkup(inlineKeyboardMarkup);
 
         DeleteMessage deleteMessage = new DeleteMessage();
         deleteMessage.setChatId(message.getChatId().toString());
         deleteMessage.setMessageId(message.getMessageId());
-        methods.add(deleteMessage);
-        methods.add(editMessageText);
-        return methods;
+        bot.execute(editMessageText);
+        bot.execute(deleteMessage);
+
     }
 }

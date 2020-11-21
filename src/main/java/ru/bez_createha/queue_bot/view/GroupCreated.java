@@ -1,5 +1,7 @@
 package ru.bez_createha.queue_bot.view;
 
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import ru.bez_createha.queue_bot.Bot;
 import ru.bez_createha.queue_bot.model.Group;
 import ru.bez_createha.queue_bot.model.User;
 import ru.bez_createha.queue_bot.services.GroupService;
@@ -32,8 +34,7 @@ public class GroupCreated implements MessageCommand{
         return message -> message.getChat().getType().equals("group") && message.getNewChatMembers().get(0).getFirstName().equals("SuckTestSuckBot");
     }
 
-    public List<BotApiMethod<? extends Serializable>> process(Message message, User user) {
-        List<BotApiMethod<? extends Serializable>> methods = new ArrayList<>();
+    public void process(Message message, User user, Bot bot) throws TelegramApiException {
         SendMessage response = new SendMessage();
         response.setChatId(String.valueOf(message.getChatId()));
         if (groupService.findAllByAdmin(user).size() < 4) {
@@ -45,13 +46,13 @@ public class GroupCreated implements MessageCommand{
             groupService.saveGroup(group);
 
             response.setText("Группа добавлена, Админ группы: " + user.getName() + "\n" + "Для связи перейдите @SuckTestSuckBot");
+            bot.execute(response);
         } else {
             response.setText(user.getName() + ", лимит групп для одного пользователя - 4. Вы можете удалить группы, созданные ранее");
             LeaveChat leaveChat = new LeaveChat();
             leaveChat.setChatId(String.valueOf(message.getChatId()));
-            methods.add(leaveChat);
+            bot.execute(response);
+            bot.execute(leaveChat);
         }
-        methods.add(0, response);
-        return methods;
     }
 }
