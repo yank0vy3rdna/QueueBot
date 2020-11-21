@@ -1,6 +1,8 @@
 package ru.bez_createha.queue_bot.model;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
@@ -8,7 +10,8 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
 @Table(name = "queues")
 public class Queue extends IdBaseEntity {
 

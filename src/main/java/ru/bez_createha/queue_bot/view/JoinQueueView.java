@@ -32,7 +32,9 @@ public class JoinQueueView implements CallbackCommand {
 
     @Override
     public void process(CallbackQuery callbackQuery, User user, Bot bot) throws TelegramApiException {
+
         String[] splitted = callbackQuery.getData().split("::");
+        System.out.println(splitted[0]);
         Long queue_id = Long.valueOf(splitted[1]);
         Long group_id = Long.valueOf(splitted[2]);
         Queue queue = queueService.getById(queue_id);
