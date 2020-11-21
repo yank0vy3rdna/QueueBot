@@ -8,5 +8,5 @@ import java.util.List;
 public interface GroupService {
     List<Group> findAllByAdmin(User admin);
     void saveGroup(Group group);
-    Group findById(Long chatId);
+    Group findByChatId(Long chatId);
 }

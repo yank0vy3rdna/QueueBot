@@ -34,12 +34,12 @@ public class GroupView implements MessageCommand {
 
     @Override
     public Predicate<String> statePredicate() {
-        return s -> s.equals(State.GROUP_MENU.toString());
+        return s -> true;
     }
 
     @Override
     public Predicate<Message> messagePredicate() {
-        return message -> true;
+        return message -> message.getText().equals("/start");
     }
 
     public List<BotApiMethod<? extends Serializable>> process(Message message, User user) {

@@ -2,6 +2,7 @@ package ru.bez_createha.queue_bot.scheduler;
 
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.bez_createha.queue_bot.Bot;
@@ -9,10 +10,18 @@ import ru.bez_createha.queue_bot.model.Queue;
 import ru.bez_createha.queue_bot.model.QueueStatus;
 import ru.bez_createha.queue_bot.services.QueueService;
 
+@Component
 public class StartQueueJob implements Job {
+
+    private final Bot bot;
+
+    public StartQueueJob(Bot bot) {
+        this.bot = bot;
+    }
+
     @Override
     public void execute(JobExecutionContext jobExecutionContext) {
-        Bot bot = (Bot) jobExecutionContext.getJobDetail().getJobDataMap().get("bot");
+
         Queue queue = (Queue) jobExecutionContext.getJobDetail().getJobDataMap().get("queue");
         QueueService queueService = (QueueService) jobExecutionContext.getJobDetail().getJobDataMap().get("queue_service");
         SendMessage sendMessage = new SendMessage();

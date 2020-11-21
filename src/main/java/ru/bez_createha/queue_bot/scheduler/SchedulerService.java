@@ -18,10 +18,8 @@ import static org.quartz.TriggerKey.triggerKey;
 public class SchedulerService {
     private final Scheduler scheduler;
     private final QueueService queueService;
-    private final Bot bot;
-    public SchedulerService(QueueService queueService, Bot bot) throws SchedulerException {
+    public SchedulerService(QueueService queueService) throws SchedulerException {
         this.queueService = queueService;
-        this.bot = bot;
 
         SchedulerFactory sf = new StdSchedulerFactory();
         scheduler = sf.getScheduler();
@@ -39,7 +37,6 @@ public class SchedulerService {
     public void registerJob(Queue queue) throws SchedulerException {
         JobDataMap jobDataMap = new JobDataMap();
         jobDataMap.put("queue", queue);
-        jobDataMap.put("bot", bot);
         jobDataMap.put("queue_service", queueService);
         JobDetail jobDetail = JobBuilder
                 .newJob(StartQueueJob.class)

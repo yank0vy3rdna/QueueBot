@@ -31,7 +31,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public Group findById(Long chatId) {
-        return groupRepository.findById(chatId).orElse(null);
+    public Group findByChatId(Long chatId) {
+        return groupRepository.findByChatId(chatId);
     }
 }

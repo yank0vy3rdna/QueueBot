@@ -49,7 +49,7 @@ public class QueueView implements CallbackCommand{
     public List<BotApiMethod<? extends Serializable>> process(CallbackQuery callbackQuery, User user) {
 
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
-        Group group = groupService.findById(Long.valueOf(callbackQuery.getData().split("::")[1]));
+        Group group = groupService.findByChatId(Long.valueOf(callbackQuery.getData().split("::")[1]));
         userContext.getUserStaff(user.getUserId()).setGroup(group);
 
         user.setMessageId(callbackQuery.getMessage().getMessageId());

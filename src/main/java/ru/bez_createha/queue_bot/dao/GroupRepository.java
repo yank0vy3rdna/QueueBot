@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface GroupRepository extends JpaRepository<Group,Long> {
     List<Group> findAllByAdmin(User admin);
+    Group findByChatId(Long chatId);
 }
