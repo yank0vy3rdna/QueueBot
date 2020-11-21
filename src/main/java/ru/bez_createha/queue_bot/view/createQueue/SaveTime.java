@@ -14,7 +14,7 @@ import ru.bez_createha.queue_bot.model.Queue;
 import ru.bez_createha.queue_bot.model.QueueStatus;
 import ru.bez_createha.queue_bot.model.State;
 import ru.bez_createha.queue_bot.model.User;
-import ru.bez_createha.queue_bot.scheduler.SchedulerService;
+import ru.bez_createha.queue_bot.scheduler.QueueSchedular;
 import ru.bez_createha.queue_bot.services.QueueService;
 import ru.bez_createha.queue_bot.utils.InlineButton;
 import ru.bez_createha.queue_bot.view.MessageCommand;
@@ -32,15 +32,15 @@ import java.util.function.Predicate;
 public class SaveTime implements MessageCommand {
     private final UserContext userContext;
     private final QueueService queueService;
-    private final SchedulerService schedulerService;
     private final InlineButton telegramUtil;
+    private final QueueSchedular queueSchedular;
 
 
-    public SaveTime(UserContext userContext, QueueService queueService, SchedulerService schedulerService, InlineButton telegramUtil) {
+    public SaveTime(UserContext userContext, QueueService queueService, InlineButton telegramUtil, QueueSchedular queueSchedular) {
         this.userContext = userContext;
         this.queueService = queueService;
-        this.schedulerService = schedulerService;
         this.telegramUtil = telegramUtil;
+        this.queueSchedular = queueSchedular;
     }
 
     @Override
@@ -83,12 +83,13 @@ public class SaveTime implements MessageCommand {
             )));
             inlineKeyboardMarkup.setKeyboard(keyboard);
             editMessageText.setReplyMarkup(inlineKeyboardMarkup);
-            try {
-                schedulerService.registerJob(queue);
+//            try {
+                queueSchedular.createJob(queue);
                 editMessageText.setText("Очередь создана");
-            } catch (SchedulerException e) {
-                editMessageText.setText("Матовый");
-            }
+//            } catch (SchedulerException e) {
+//                //
+//                editMessageText.setText("Матовый");
+//            }
         } catch (ParseException exception) {
             editMessageText.setText("Неверный формат. Введи время в формате HH:mm");
         }

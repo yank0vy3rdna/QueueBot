@@ -63,8 +63,8 @@ public class SimpleCalendar {
         for (String day: dayInRussian) {
             row.add(telegramUtil.createInlineKeyboardButton(day,"nope"));
         }
-
         keyboardButtons.add(row);
+
         //clear it before creating day buttons
         row = new ArrayList<>();
 
