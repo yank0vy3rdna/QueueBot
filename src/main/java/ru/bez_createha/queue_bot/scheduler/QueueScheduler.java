@@ -30,7 +30,7 @@ public class QueueScheduler {
     }
 
     public void createJob(Queue queue, Bot bot) {
-        ScheduledJob scheduledJob = new ScheduledJob(bot, telegramUtil);
+        ScheduledJob scheduledJob = new ScheduledJob(bot, telegramUtil, queueService);
         long initialDelay = queue.getStartTime().getTime() - Clock.systemDefaultZone().millis();
 
         scheduledJob.setQueue(queue);

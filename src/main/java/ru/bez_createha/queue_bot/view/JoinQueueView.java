@@ -6,6 +6,7 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.bez_createha.queue_bot.Bot;
 import ru.bez_createha.queue_bot.model.Queue;
+import ru.bez_createha.queue_bot.model.QueueStatus;
 import ru.bez_createha.queue_bot.model.User;
 import ru.bez_createha.queue_bot.services.QueueService;
 
@@ -31,10 +32,11 @@ public class JoinQueueView implements CallbackCommand {
 
     @Override
     public void process(CallbackQuery callbackQuery, User user, Bot bot) throws TelegramApiException {
-        Long queue_id = Long.valueOf(callbackQuery.getData().split("::")[1]);
-        Long group_id = Long.valueOf(callbackQuery.getData().split("::")[2]);
+        String[] splitted = callbackQuery.getData().split("::");
+        Long queue_id = Long.valueOf(splitted[1]);
+        Long group_id = Long.valueOf(splitted[2]);
         Queue queue = queueService.getById(queue_id);
-        if (queue.getGroupId().getId().equals(group_id)) {
+        if (queue.getGroupId().getId().equals(group_id) && queue.getStatus().equals(QueueStatus.ACTIVE)) {
             if (queue.getQueue_users().stream().noneMatch(
                     user1 -> user1.getUserId().equals(user.getUserId())
             )) {
