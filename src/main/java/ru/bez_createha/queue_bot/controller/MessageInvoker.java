@@ -31,6 +31,7 @@ public class MessageInvoker {
         for (MessageCommand command : commands) {
             if(command.statePredicate().test(user.getBotState()) && command.messagePredicate().test(message)){
                 command.process(message, user, bot);
+                return;
             }
         }
         groupView.process(message, user, bot);

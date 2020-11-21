@@ -5,6 +5,7 @@ import ru.bez_createha.queue_bot.Bot;
 import ru.bez_createha.queue_bot.model.Queue;
 import ru.bez_createha.queue_bot.model.QueueStatus;
 import ru.bez_createha.queue_bot.services.QueueService;
+import ru.bez_createha.queue_bot.utils.InlineButton;
 
 import java.time.Clock;
 import java.util.List;
@@ -14,9 +15,12 @@ import java.util.Timer;
 public class QueueScheduler {
 
     private final QueueService queueService;
+    private final InlineButton telegramUtil;
 
-    public QueueScheduler(QueueService queueService) {
+
+    public QueueScheduler(QueueService queueService, InlineButton telegramUtil) {
         this.queueService = queueService;
+        this.telegramUtil = telegramUtil;
     }
     public void initFromDb(Bot bot){
         List<Queue> queues = queueService.findAllByStatus(QueueStatus.NOT_STARTED);
@@ -26,11 +30,10 @@ public class QueueScheduler {
     }
 
     public void createJob(Queue queue, Bot bot) {
-        ScheduledJob scheduledJob = new ScheduledJob(bot);
+        ScheduledJob scheduledJob = new ScheduledJob(bot, telegramUtil);
         long initialDelay = queue.getStartTime().getTime() - Clock.systemDefaultZone().millis();
 
         scheduledJob.setQueue(queue);
-
 
         Timer timer = new Timer();
         timer.schedule(scheduledJob, initialDelay);
