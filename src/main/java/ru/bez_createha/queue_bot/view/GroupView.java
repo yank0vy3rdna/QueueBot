@@ -50,7 +50,8 @@ public class GroupView implements MessageCommand {
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         List<Group> groups = groupService.findAllByAdmin(user);
         List<InlineKeyboardButton> inlineKeyboardButtonsRow = new ArrayList<>();
-        for (int i = 0; i < groups.size(); i++) {
+        int i;
+        for (i = 0; i < groups.size(); i++) {
             InlineKeyboardButton button =
                     telegramUtil.createInlineKeyboardButton(
                             groups.get(i).getName(),
@@ -61,6 +62,10 @@ public class GroupView implements MessageCommand {
                 keyboard.add(inlineKeyboardButtonsRow);
                 inlineKeyboardButtonsRow = new ArrayList<>();
             }
+
+        }
+        if (i % 2 == 1){
+            keyboard.add(inlineKeyboardButtonsRow);
         }
 
         inlineKeyboardMarkup.setKeyboard(keyboard);

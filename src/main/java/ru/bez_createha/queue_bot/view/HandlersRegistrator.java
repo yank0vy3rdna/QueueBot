@@ -31,7 +31,6 @@ public class HandlersRegistrator {
     }
 
     public void registerAllHandlers(TelegramController telegramController){
-        telegramController.registerMessageHandler(groupView);
         telegramController.registerMessageHandler(groupCreated);
         telegramController.registerMessageHandler(stepTwoView);
         telegramController.registerCallbackHandler(queueView);
@@ -40,5 +39,6 @@ public class HandlersRegistrator {
         telegramController.registerCallbackHandler(calendarBack);
         telegramController.registerCallbackHandler(calendarForward);
         telegramController.registerCallbackHandler(saveData);
+        telegramController.registerMessageHandler(groupView);
     }
 }
