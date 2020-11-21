@@ -20,13 +20,13 @@ public class Queue extends IdBaseEntity {
     @Enumerated(EnumType.STRING)
     private QueueStatus status;
 
-    @ManyToMany(cascade = {CascadeType.ALL})
+    @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     @JoinTable(name = "queue_users",
             joinColumns = @JoinColumn(name = "id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> queue_users;
 
-    @ManyToOne(cascade = {CascadeType.ALL})
+    @ManyToOne(cascade = { CascadeType.MERGE },fetch = FetchType.EAGER)
     @JoinColumn(name = "group_id", referencedColumnName = "id")
     private Group groupId;
 

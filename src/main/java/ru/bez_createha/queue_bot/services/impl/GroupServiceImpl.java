@@ -26,7 +26,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public void saveGroup(Group group) {
+    public void saveGroup(Group group){
         groupRepository.save(group);
     }
 
@@ -34,4 +34,6 @@ public class GroupServiceImpl implements GroupService {
     public Group findByChatId(Long chatId) {
         return groupRepository.findByChatId(chatId);
     }
+
+
 }
