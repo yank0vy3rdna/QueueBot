@@ -10,10 +10,10 @@ import java.util.List;
 @Table(name = "GROUPS")
 public class Group extends TgBaseEntity {
 
-    @OneToMany (mappedBy="groupId")
+    @OneToMany (mappedBy="groupId", cascade = {CascadeType.ALL})
     private List<Queue> queue;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name = "admin_id", referencedColumnName = "user_id")
     private User admin;
     private String name;

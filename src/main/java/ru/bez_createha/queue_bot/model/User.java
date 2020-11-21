@@ -21,7 +21,7 @@ public class User extends TgUserBaseEntity{
     @Column(name = "message_id")
     private Integer messageId;
 
-    @ManyToMany(mappedBy = "queue_users")
+    @ManyToMany(mappedBy = "queue_users",cascade = {CascadeType.ALL})
     List<Queue> queues;
 
 }

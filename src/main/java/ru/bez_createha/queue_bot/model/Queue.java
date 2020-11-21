@@ -26,7 +26,7 @@ public class Queue extends IdBaseEntity {
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> queue_users;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name = "group_id", referencedColumnName = "id")
     private Group groupId;
 
