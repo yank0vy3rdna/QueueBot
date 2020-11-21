@@ -1,14 +1,13 @@
 package ru.bez_createha.queue_bot.controller;
 
+import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.bez_createha.queue_bot.Bot;
 import ru.bez_createha.queue_bot.model.User;
 import ru.bez_createha.queue_bot.view.CallbackCommand;
 import org.springframework.stereotype.Controller;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,5 +29,8 @@ public class CallbackInvoker {
                 command.process(callbackQuery, user, bot);
             }
         }
+        AnswerCallbackQuery answerCallbackQuery = new AnswerCallbackQuery();
+        answerCallbackQuery.setCallbackQueryId(callbackQuery.getId());
+        bot.execute(answerCallbackQuery);
     }
 }
