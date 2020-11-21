@@ -43,14 +43,14 @@ public class CalendarForward implements CallbackCommand {
 
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         simpleCalendar.increaseMonthNum();
-        inlineKeyboardMarkup.setKeyboard(simpleCalendar.createCalendar(callbackQuery.getData().split("::")[1]));
+        inlineKeyboardMarkup.setKeyboard(simpleCalendar.createCalendar());
 
         List<BotApiMethod<? extends Serializable>> methods = new ArrayList<>();
 
         EditMessageText editMessageText = new EditMessageText();
         editMessageText.setMessageId(user.getMessageId());
         editMessageText.setChatId(callbackQuery.getMessage().getChatId().toString());
-        editMessageText.setText("Вы успешно создали очередь с именем: "+callbackQuery.getData().split("::")[1]+"\nТеперь нужно выбрать дату и время начала очереди");
+        editMessageText.setText("Вы успешно создали очередь с именем: "+userContext.getUserStaff(user.getUserId()).getRawQueue().getName()+"\nТеперь нужно выбрать дату и время начала очереди");
         editMessageText.setReplyMarkup(inlineKeyboardMarkup);
 
         methods.add(editMessageText);

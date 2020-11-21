@@ -50,7 +50,7 @@ public class SimpleCalendar {
         }
     }
 
-    public List<List<InlineKeyboardButton>> createCalendar(String queueName) {
+    public List<List<InlineKeyboardButton>> createCalendar() {
         List<List<InlineKeyboardButton>> keyboardButtons = new ArrayList<>();
         List<InlineKeyboardButton> row = new ArrayList<>();
 
@@ -79,7 +79,7 @@ public class SimpleCalendar {
         }
 
         for (int i = 1 ; i <= numberOfDaysInTempMonth; i++) {
-            row.add(telegramUtil.createInlineKeyboardButton(String.valueOf(i), "save_date::"+ i+"/"+tempMonth+"/"+year+"::"+queueName));
+            row.add(telegramUtil.createInlineKeyboardButton(String.valueOf(i), "save_date::"+ i+"/"+tempMonth+"/"+year));
             if ((i + startingDay) % 7 == 0) {
                 keyboardButtons.add(row);
                 row = new ArrayList<>();
@@ -96,9 +96,9 @@ public class SimpleCalendar {
 
         row = new ArrayList<>();
 
-        row.add(telegramUtil.createInlineKeyboardButton("<", "calendar_back::"+queueName));
+        row.add(telegramUtil.createInlineKeyboardButton("<", "calendar_back"));
         row.add(telegramUtil.createInlineKeyboardButton(" ", "nope"));
-        row.add(telegramUtil.createInlineKeyboardButton(">", "calendar_forward::"+queueName));
+        row.add(telegramUtil.createInlineKeyboardButton(">", "calendar_forward"));
 
         keyboardButtons.add(row);
         return keyboardButtons;

@@ -1,6 +1,7 @@
 package ru.bez_createha.queue_bot.view.createQueue;
 
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import ru.bez_createha.queue_bot.context.RawQueue;
 import ru.bez_createha.queue_bot.context.UserContext;
 import ru.bez_createha.queue_bot.model.State;
 import ru.bez_createha.queue_bot.model.User;
@@ -39,9 +40,11 @@ public class StepTwoView implements MessageCommand {
         String QUEUE_NAME = message.getText();
 
         SimpleCalendar simpleCalendar = userContext.getUserStaff(user.getUserId()).getSimpleCalendar();
+        RawQueue rawQueue = userContext.getUserStaff(user.getUserId()).getRawQueue();
+        rawQueue.setName(QUEUE_NAME);
 
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
-        inlineKeyboardMarkup.setKeyboard(simpleCalendar.createCalendar(QUEUE_NAME));
+        inlineKeyboardMarkup.setKeyboard(simpleCalendar.createCalendar());
         user.setBotState(State.ENTER_QUEUE_DATE.toString());
         List<BotApiMethod<? extends Serializable>> methods = new ArrayList<>();
 
