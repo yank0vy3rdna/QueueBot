@@ -14,8 +14,6 @@ public class Queue extends IdBaseEntity {
     private String tag;
     @Column(name = "start_time")
     private Date startTime;
-    @Column(name = "end_time")
-    private Date endTime;
     @Column(name = "status")
 
     @Enumerated(EnumType.STRING)
