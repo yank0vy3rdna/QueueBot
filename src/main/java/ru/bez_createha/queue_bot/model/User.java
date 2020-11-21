@@ -22,6 +22,6 @@ public class User extends TgUserBaseEntity{
     private Integer messageId;
 
     @ManyToMany(mappedBy = "queue_users")
-    List<Queue> likes;
+    List<Queue> queues;
 
 }
