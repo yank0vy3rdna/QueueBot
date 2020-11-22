@@ -27,6 +27,7 @@ public class CallbackInvoker {
         for (CallbackCommand command : commands) {
             if(command.statePredicate().test(user.getBotState()) && command.callbackPredicate().test(callbackQuery)){
                 command.process(callbackQuery, user, bot);
+                break;
             }
         }
         AnswerCallbackQuery answerCallbackQuery = new AnswerCallbackQuery();
