@@ -1,0 +1,10 @@
+spring.datasource.url = db_url
+spring.datasource.username = db_username
+spring.datasource.password = db_pass
+
+
+spring.jpa.hibernate.ddl-auto = update
+spring.jpa.properties.hibernate.enable_lazy_load_no_trans=true
+
+bot.name = BotFirstName
+bot.token= TelegramToken
