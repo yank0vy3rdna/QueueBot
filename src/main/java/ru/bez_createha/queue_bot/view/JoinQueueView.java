@@ -51,7 +51,6 @@ public class JoinQueueView implements CallbackCommand {
                 queueService.removeUser(queue, user);
             }
         }
-
         EditMessageText editMessageText = new EditMessageText();
         editMessageText.setChatId(callbackQuery.getMessage().getChatId().toString());
         StringBuilder stringBuilder = new StringBuilder();
