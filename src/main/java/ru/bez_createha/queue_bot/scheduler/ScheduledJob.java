@@ -33,7 +33,7 @@ public class ScheduledJob extends TimerTask {
         queueService.save(queue);
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(queue.getGroupId().getChatId().toString());
-        sendMessage.setText("Очередь запущена!");
+        sendMessage.setText("Очередь " + queue.getTag() + " запущена!");
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         inlineKeyboardMarkup.setKeyboard(
                 Collections.singletonList(
