@@ -11,4 +11,5 @@ import java.util.List;
 public interface QueueRepository extends JpaRepository<Queue,Long> {
     List<Queue> findAllByGroupId(Group groupId);
     List<Queue> findAllByStatus(QueueStatus status);
+    Queue getById(Long id);
 }
