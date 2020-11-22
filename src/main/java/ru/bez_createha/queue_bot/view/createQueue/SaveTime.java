@@ -58,40 +58,43 @@ public class SaveTime implements MessageCommand {
     public void process(Message message, User user, Bot bot) throws TelegramApiException {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
         String[] splitted = message.getText().split(":");
-        Integer chosen_hour = Integer.valueOf(splitted[0]);
-        Integer chosen_minets = Integer.valueOf(splitted[1]);
 
-        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
-
-        List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
-        keyboard.add(Collections.singletonList(telegramUtil.createInlineKeyboardButton(
-                "Назад",
-                "back"
-        )));
-        inlineKeyboardMarkup.setKeyboard(keyboard);
+        Integer chosen_hour = 0;
+        Integer chosen_minets = 0;
 
         DeleteMessage deleteMessage = new DeleteMessage();
         deleteMessage.setChatId(message.getChatId().toString());
         deleteMessage.setMessageId(message.getMessageId());
+        EditMessageText editMessageText = new EditMessageText();
+        editMessageText.setMessageId(user.getMessageId());
+        editMessageText.setChatId(message.getChatId().toString());
 
-        if (checkIfDeprecetedTime(chosen_hour, chosen_minets)) {
-            EditMessageText editMessageText = new EditMessageText();
-            editMessageText.setMessageId(user.getMessageId());
-            editMessageText.setChatId(message.getChatId().toString());
-            editMessageText.setText("Указанное время должно быть с запасов как минимум 15 минут.");
-            editMessageText.setReplyMarkup(inlineKeyboardMarkup);
-            bot.execute(editMessageText);
-        }else {
-            user.setBotState(State.GROUP_MENU.toString());
-            EditMessageText editMessageText = new EditMessageText();
-            editMessageText.setMessageId(user.getMessageId());
-            editMessageText.setChatId(message.getChatId().toString());
-            try {
+        try {
+            chosen_hour = Integer.valueOf(splitted[0]);
+            chosen_minets = Integer.valueOf(splitted[1]);
+
+            InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+
+            List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
+            keyboard.add(Collections.singletonList(telegramUtil.createInlineKeyboardButton(
+                    "Назад",
+                    "back"
+            )));
+            inlineKeyboardMarkup.setKeyboard(keyboard);
+
+            if (checkIfDeprecetedTime(chosen_hour, chosen_minets)) {
+
+                editMessageText.setText("Указанное время должно быть с запасов как минимум 15 минут.");
+                editMessageText.setReplyMarkup(inlineKeyboardMarkup);
+                bot.execute(editMessageText);
+            }else {
+                user.setBotState(State.GROUP_MENU.toString());
+
                 simpleDateFormat.parse(message.getText());
 
                 RawQueue rawQueue = userContext.getUserStaff(user.getUserId()).getRawQueue();
-                rawQueue.setHrs_start(Integer.valueOf(splitted[0]));
-                rawQueue.setMin_start(Integer.valueOf(splitted[1]));
+                rawQueue.setHrs_start(chosen_hour);
+                rawQueue.setMin_start(chosen_minets);
                 Date date = rawQueue.buildDate();
                 Queue queue = new Queue();
                 queue.setGroupId(userContext.getUserStaff(user.getUserId()).getGroup());
@@ -108,11 +111,12 @@ public class SaveTime implements MessageCommand {
 
                 SendMessage sendMessage = new SendMessage();
                 sendMessage.setChatId(String.valueOf(queue.getGroupId().getChatId()));
-                sendMessage.setText("Очередь \"" + queue.getTag() + "\" создана.\n Начало: " + date.toString());
+                sendMessage.setText("Очередь \"" + queue.getTag() + "\" создана.\nНачало: " + date.toString());
                 bot.execute(sendMessage);
-            } catch (ParseException exception) {
-                editMessageText.setText("Неверный формат. Введи время в формате HH:mm");
+                bot.execute(editMessageText);
             }
+        }catch (ParseException exception) {
+            editMessageText.setText("Неверный формат. Введи время в формате HH:mm");
             bot.execute(editMessageText);
         }
         bot.execute(deleteMessage);
