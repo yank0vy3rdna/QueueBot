@@ -45,7 +45,7 @@ public class DeleteMenu implements CallbackCommand{
 
     @Override
     public void process(CallbackQuery callbackQuery, User user, Bot bot) throws TelegramApiException {
-        user.setBotState(State.QUEUE_MENU_STOP.toString());
+        user.setBotState(State.QUEUE_MENU_DELETE.toString());
 
         Queue queue = userContext.getUserStaff(user.getUserId()).getQueue();
         queueService.delete(queue);

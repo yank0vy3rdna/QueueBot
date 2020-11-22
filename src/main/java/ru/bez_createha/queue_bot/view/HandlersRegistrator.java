@@ -30,10 +30,11 @@ public class HandlersRegistrator {
     private final BackResultOfQueue backResultOfQueue;
     private final BackQueueAdmin backQueueAdmin;
     private final BackStopQueue backStopQueue;
+    private final BackDeleteQueue backDeleteQueue;
     private final DeleteMenu deleteMenu;
 
 
-    public HandlersRegistrator(GroupView groupView, GroupCreated groupCreated, QueueView queueView, BackGroupView backGroupView, StepOneView stepOneView, StepTwoView stepTwoView, CalendarBack calendarBack, CalendarForward calendarForward, SaveDate saveData, SaveTime saveTime, JoinQueueView joinQueueView, GroupDeleted groupDeleted, BackQueueName backQueueName, BackCalendar backCalendar, BackTime backTime, QueueAdminMenu queueAdminMenu, StopMenu stopMenu, ResultMenu resultMenu, BackQueueCreated backQueueCreated, QueueAdminMenu queueAdminMenu1, StopMenu stopMenu1, ResultMenu resultMenu1, BackResultOfQueue backResultOfQueue, BackQueueAdmin backQueueAdmin, BackStopQueue backStopQueue, DeleteMenu deleteMenu) {
+    public HandlersRegistrator(GroupView groupView, GroupCreated groupCreated, QueueView queueView, BackGroupView backGroupView, StepOneView stepOneView, StepTwoView stepTwoView, CalendarBack calendarBack, CalendarForward calendarForward, SaveDate saveData, SaveTime saveTime, JoinQueueView joinQueueView, GroupDeleted groupDeleted, BackQueueName backQueueName, BackCalendar backCalendar, BackTime backTime, QueueAdminMenu queueAdminMenu, StopMenu stopMenu, ResultMenu resultMenu, BackQueueCreated backQueueCreated, QueueAdminMenu queueAdminMenu1, StopMenu stopMenu1, ResultMenu resultMenu1, BackResultOfQueue backResultOfQueue, BackQueueAdmin backQueueAdmin, BackStopQueue backStopQueue, BackDeleteQueue backDeleteQueue, DeleteMenu deleteMenu) {
         this.groupView = groupView;
         this.stepTwoView = stepTwoView;
         this.groupCreated = groupCreated;
@@ -56,6 +57,7 @@ public class HandlersRegistrator {
         this.backResultOfQueue = backResultOfQueue;
         this.backQueueAdmin = backQueueAdmin;
         this.backStopQueue = backStopQueue;
+        this.backDeleteQueue = backDeleteQueue;
         this.deleteMenu = deleteMenu;
     }
 
@@ -73,6 +75,7 @@ public class HandlersRegistrator {
         telegramController.registerCallbackHandler(backResultOfQueue);
         telegramController.registerCallbackHandler(backQueueAdmin);
         telegramController.registerCallbackHandler(backStopQueue);
+        telegramController.registerCallbackHandler(backDeleteQueue);
         telegramController.registerCallbackHandler(stepOneView);
         telegramController.registerCallbackHandler(calendarBack);
         telegramController.registerCallbackHandler(calendarForward);
