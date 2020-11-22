@@ -73,6 +73,10 @@ public class SaveTime implements MessageCommand {
             chosen_hour = Integer.valueOf(splitted[0]);
             chosen_minets = Integer.valueOf(splitted[1]);
 
+            Integer day_start = userContext.getUserStaff(user.getUserId()).getRawQueue().getDay_start();
+            Integer month_start = userContext.getUserStaff(user.getUserId()).getRawQueue().getMonth_start();
+            Integer year_start = userContext.getUserStaff(user.getUserId()).getRawQueue().getYear_start();
+
             InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
 
             List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
@@ -82,7 +86,7 @@ public class SaveTime implements MessageCommand {
             )));
             inlineKeyboardMarkup.setKeyboard(keyboard);
 
-            if (checkIfDeprecetedTime(chosen_hour, chosen_minets)) {
+            if (checkIfDeprecatedTime(year_start, month_start, day_start, chosen_hour, chosen_minets)) {
 
                 editMessageText.setText("Указанное время должно быть с запасов как минимум 15 минут.");
                 editMessageText.setReplyMarkup(inlineKeyboardMarkup);
@@ -115,24 +119,28 @@ public class SaveTime implements MessageCommand {
                 bot.execute(sendMessage);
                 bot.execute(editMessageText);
             }
-        }catch (ParseException exception) {
+        }catch (ParseException | NumberFormatException exception) {
             editMessageText.setText("Неверный формат. Введи время в формате HH:mm");
             bot.execute(editMessageText);
         }
         bot.execute(deleteMessage);
     }
 
-    private boolean checkIfDeprecetedTime(Integer hours, Integer minutes) {
-        SimpleDateFormat time_formate = new SimpleDateFormat("HH:mm");
-        Integer temp_hour = Calendar.getInstance().get(Calendar.HOUR);
-        Integer temp_minute = Calendar.getInstance().get(Calendar.MINUTE) + 15;
+    private boolean checkIfDeprecatedTime(Integer year, Integer month, Integer day, Integer hours, Integer minutes) {
+        SimpleDateFormat time_formate = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
+        Integer current_day = Calendar.getInstance().get(Calendar.DATE);
+        Integer current_month = Calendar.getInstance().get(Calendar.MONTH) + 1;
+        Integer current_year = Calendar.getInstance().get(Calendar.YEAR);
+        Integer current_hour = Calendar.getInstance().get(Calendar.HOUR);
+        Integer current_minute = Calendar.getInstance().get(Calendar.MINUTE) + 15;
 
         Date chosenHourseAndMinutes = new Date();
         Date tempHourseAndMinutes = new Date();
 
         try {
-            chosenHourseAndMinutes = time_formate.parse(hours+":"+minutes);
-            tempHourseAndMinutes = time_formate.parse(temp_hour+":"+temp_minute);
+            chosenHourseAndMinutes = time_formate.parse(year + ":" + month + ":" + day + " " + hours+":"+minutes);
+            tempHourseAndMinutes = time_formate.parse(current_year + ":" + current_month + ":" + current_day + " " + current_hour + ":" + current_minute);
         }catch (ParseException ex) {/*NOPE*/}
 
         return chosenHourseAndMinutes.before(tempHourseAndMinutes);
