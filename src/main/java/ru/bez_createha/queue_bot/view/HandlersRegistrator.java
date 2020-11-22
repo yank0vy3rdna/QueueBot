@@ -28,9 +28,11 @@ public class HandlersRegistrator {
     private final StopMenu stopMenu;
     private final ResultMenu resultMenu;
     private final BackResultOfQueue backResultOfQueue;
+    private final BackQueueAdmin backQueueAdmin;
+    private final BackStopQueue backStopQueue;
 
 
-    public HandlersRegistrator(GroupView groupView, GroupCreated groupCreated, QueueView queueView, BackGroupView backGroupView, StepOneView stepOneView, StepTwoView stepTwoView, CalendarBack calendarBack, CalendarForward calendarForward, SaveDate saveData, SaveTime saveTime, JoinQueueView joinQueueView, GroupDeleted groupDeleted, BackQueueName backQueueName, BackCalendar backCalendar, BackTime backTime, QueueAdminMenu queueAdminMenu, StopMenu stopMenu, ResultMenu resultMenu, BackQueueCreated backQueueCreated, QueueAdminMenu queueAdminMenu1, StopMenu stopMenu1, ResultMenu resultMenu1, BackResultOfQueue backResultOfQueue) {
+    public HandlersRegistrator(GroupView groupView, GroupCreated groupCreated, QueueView queueView, BackGroupView backGroupView, StepOneView stepOneView, StepTwoView stepTwoView, CalendarBack calendarBack, CalendarForward calendarForward, SaveDate saveData, SaveTime saveTime, JoinQueueView joinQueueView, GroupDeleted groupDeleted, BackQueueName backQueueName, BackCalendar backCalendar, BackTime backTime, QueueAdminMenu queueAdminMenu, StopMenu stopMenu, ResultMenu resultMenu, BackQueueCreated backQueueCreated, QueueAdminMenu queueAdminMenu1, StopMenu stopMenu1, ResultMenu resultMenu1, BackResultOfQueue backResultOfQueue, BackQueueAdmin backQueueAdmin, BackStopQueue backStopQueue) {
         this.groupView = groupView;
         this.stepTwoView = stepTwoView;
         this.groupCreated = groupCreated;
@@ -51,6 +53,8 @@ public class HandlersRegistrator {
         this.stopMenu = stopMenu1;
         this.resultMenu = resultMenu1;
         this.backResultOfQueue = backResultOfQueue;
+        this.backQueueAdmin = backQueueAdmin;
+        this.backStopQueue = backStopQueue;
     }
 
     public void registerAllHandlers(TelegramController telegramController){
@@ -65,6 +69,8 @@ public class HandlersRegistrator {
         telegramController.registerCallbackHandler(backTime);
         telegramController.registerCallbackHandler(backQueueCreated);
         telegramController.registerCallbackHandler(backResultOfQueue);
+        telegramController.registerCallbackHandler(backQueueAdmin);
+        telegramController.registerCallbackHandler(backStopQueue);
         telegramController.registerCallbackHandler(stepOneView);
         telegramController.registerCallbackHandler(calendarBack);
         telegramController.registerCallbackHandler(calendarForward);
