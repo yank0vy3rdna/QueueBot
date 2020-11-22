@@ -2,10 +2,7 @@ package ru.bez_createha.queue_bot.view;
 
 
 import ru.bez_createha.queue_bot.controller.TelegramController;
-import ru.bez_createha.queue_bot.view.backs.BackCalendar;
-import ru.bez_createha.queue_bot.view.backs.BackGroupView;
-import ru.bez_createha.queue_bot.view.backs.BackQueueName;
-import ru.bez_createha.queue_bot.view.backs.BackTime;
+import ru.bez_createha.queue_bot.view.backs.*;
 import ru.bez_createha.queue_bot.view.createQueue.*;
 import org.springframework.stereotype.Service;
 
@@ -26,10 +23,12 @@ public class HandlersRegistrator {
     private final BackQueueName backQueueName;
     private final BackCalendar backCalendar;
     private final BackTime backTime;
+    private final BackQueueCreated backQueueCreated;
     private final QueueAdminMenu queueAdminMenu;
     private final StopMenu stopMenu;
     private final ResultMenu resultMenu;
 
+    public HandlersRegistrator(GroupView groupView, GroupCreated groupCreated, QueueView queueView, BackGroupView backGroupView, StepOneView stepOneView, StepTwoView stepTwoView, CalendarBack calendarBack, CalendarForward calendarForward, SaveDate saveData, SaveTime saveTime, JoinQueueView joinQueueView, GroupDeleted groupDeleted, BackQueueName backQueueName, BackCalendar backCalendar, BackTime backTime, BackQueueCreated backQueueCreated) {
 
     public HandlersRegistrator(GroupView groupView, GroupCreated groupCreated, QueueView queueView, BackGroupView backGroupView, StepOneView stepOneView, StepTwoView stepTwoView, CalendarBack calendarBack, CalendarForward calendarForward, SaveDate saveData, SaveTime saveTime, JoinQueueView joinQueueView, GroupDeleted groupDeleted, BackQueueName backQueueName, BackCalendar backCalendar, BackTime backTime, QueueAdminMenu queueAdminMenu, StopMenu stopMenu, ResultMenu resultMenu) {
         this.groupView = groupView;
@@ -47,10 +46,7 @@ public class HandlersRegistrator {
         this.backQueueName = backQueueName;
         this.backCalendar = backCalendar;
         this.backTime = backTime;
-        this.queueAdminMenu = queueAdminMenu;
-        this.stopMenu = stopMenu;
-        this.resultMenu = resultMenu;
-
+        this.backQueueCreated = backQueueCreated;
     }
 
     public void registerAllHandlers(TelegramController telegramController){
@@ -63,6 +59,7 @@ public class HandlersRegistrator {
         telegramController.registerCallbackHandler(backQueueName);
         telegramController.registerCallbackHandler(backCalendar);
         telegramController.registerCallbackHandler(backTime);
+        telegramController.registerCallbackHandler(backQueueCreated);
         telegramController.registerCallbackHandler(stepOneView);
         telegramController.registerCallbackHandler(calendarBack);
         telegramController.registerCallbackHandler(calendarForward);

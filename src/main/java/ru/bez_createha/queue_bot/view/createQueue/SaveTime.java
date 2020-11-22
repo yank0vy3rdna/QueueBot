@@ -56,6 +56,7 @@ public class SaveTime implements MessageCommand {
 
     @Override
     public void process(Message message, User user, Bot bot) throws TelegramApiException {
+        user.setBotState(State.GROUP_MENU.toString());
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
         EditMessageText editMessageText = new EditMessageText();
         editMessageText.setMessageId(user.getMessageId());
