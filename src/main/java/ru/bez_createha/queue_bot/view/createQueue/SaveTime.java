@@ -93,6 +93,7 @@ public class SaveTime implements MessageCommand {
             SendMessage sendMessage = new SendMessage();
             sendMessage.setChatId(String.valueOf(queue.getGroupId().getChatId()));
             sendMessage.setText("Очередь "+queue.getTag()+"создана. Начало: "+date.toString());
+            bot.execute(sendMessage);
 //            } catch (SchedulerException e) {
 //                //
 //                editMessageText.setText("Матовый");
