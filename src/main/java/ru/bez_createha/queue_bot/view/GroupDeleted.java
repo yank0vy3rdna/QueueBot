@@ -1,5 +1,6 @@
 package ru.bez_createha.queue_bot.view;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -18,6 +19,8 @@ public class GroupDeleted implements MessageCommand{
     private final GroupService groupService;
     private final GroupRepository groupRepository;
     private final QueueService queueService;
+    @Value("${bot.name}")
+    private String botUsername;
 
     public GroupDeleted(GroupService groupService, GroupRepository groupRepository, QueueService queueService) {
         this.groupService = groupService;
@@ -33,7 +36,7 @@ public class GroupDeleted implements MessageCommand{
     @Override
     public Predicate<Message> messagePredicate() {
         return message -> { if (message.getLeftChatMember() != null) {
-            return message.getChat().getType().equals("group") && message.getLeftChatMember().getFirstName().equals("SuckTestSuckBot");
+            return message.getChat().getType().equals("group") && message.getLeftChatMember().getFirstName().equals(botUsername);
         } return false;};
     }
 
