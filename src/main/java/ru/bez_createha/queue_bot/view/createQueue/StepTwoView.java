@@ -1,5 +1,6 @@
 package ru.bez_createha.queue_bot.view.createQueue;
 
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.bez_createha.queue_bot.Bot;
@@ -40,10 +41,21 @@ public class StepTwoView implements MessageCommand {
 
     public void process(Message message, User user, Bot bot) throws TelegramApiException {
         String QUEUE_NAME = message.getText();
+        reallyProcess(user, QUEUE_NAME, message.getChatId().toString(), bot);
+        DeleteMessage deleteMessage = new DeleteMessage();
+        deleteMessage.setChatId(message.getChatId().toString());
+        deleteMessage.setMessageId(message.getMessageId());
+        bot.execute(deleteMessage);
+    }
+    public void process(CallbackQuery callbackQuery, User user, Bot bot) throws TelegramApiException {
+        String queueName = userContext.getUserStaff(user.getUserId()).getRawQueue().getName();
+        reallyProcess(user, queueName, callbackQuery.getMessage().getChatId().toString(), bot);
+    }
+    public void reallyProcess(User user, String queueName, String chatId, Bot bot) throws TelegramApiException {
 
         SimpleCalendar simpleCalendar = userContext.getUserStaff(user.getUserId()).getSimpleCalendar();
         RawQueue rawQueue = userContext.getUserStaff(user.getUserId()).getRawQueue();
-        rawQueue.setName(QUEUE_NAME);
+        rawQueue.setName(queueName);
 
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         inlineKeyboardMarkup.setKeyboard(simpleCalendar.createCalendar());
@@ -52,15 +64,9 @@ public class StepTwoView implements MessageCommand {
 
         EditMessageText editMessageText = new EditMessageText();
         editMessageText.setMessageId(user.getMessageId());
-        editMessageText.setChatId(message.getChatId().toString());
-        editMessageText.setText("Вы успешно создали очередь с именем: " + QUEUE_NAME + "\nТеперь нужно выбрать дату и время начала очереди");
+        editMessageText.setChatId(chatId);
+        editMessageText.setText("Вы успешно создали очередь с именем: " + queueName + "\nТеперь нужно выбрать дату и время начала очереди");
         editMessageText.setReplyMarkup(inlineKeyboardMarkup);
-
-        DeleteMessage deleteMessage = new DeleteMessage();
-        deleteMessage.setChatId(message.getChatId().toString());
-        deleteMessage.setMessageId(message.getMessageId());
         bot.execute(editMessageText);
-        bot.execute(deleteMessage);
-
     }
 }
