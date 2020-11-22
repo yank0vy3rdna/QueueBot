@@ -1,5 +1,6 @@
 package ru.bez_createha.queue_bot.view;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.transaction.annotation.Transactional;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.bez_createha.queue_bot.Bot;
@@ -21,6 +22,9 @@ import java.util.function.Predicate;
 public class GroupCreated implements MessageCommand{
     private final GroupService groupService;
 
+    @Value("${bot.name}")
+    private String botUsername;
+
     public GroupCreated(GroupService groupService) {
         this.groupService = groupService;
     }
@@ -32,7 +36,7 @@ public class GroupCreated implements MessageCommand{
 
     @Override
     public Predicate<Message> messagePredicate() {
-        return message -> message.getChat().getType().equals("group") && message.getNewChatMembers().get(0).getFirstName().equals("SuckTestSuckBot");
+        return message -> message.getChat().getType().equals("group") && message.getNewChatMembers().get(0).getFirstName().equals(botUsername);
     }
 
     public void process(Message message, User user, Bot bot) throws TelegramApiException {
@@ -46,7 +50,7 @@ public class GroupCreated implements MessageCommand{
             group.setChatId(message.getChatId());
             groupService.saveGroup(group);
 
-            response.setText("Группа добавлена, Админ группы: " + user.getName() + "\n" + "Для связи перейдите @SuckTestSuckBot");
+            response.setText("Группа добавлена, Админ группы: " + user.getName() + "\n" + "Для связи перейдите @cool_queue_bot");
             bot.execute(response);
         } else {
             response.setText(user.getName() + ", лимит групп для одного пользователя - 4. Вы можете удалить группы, созданные ранее");
