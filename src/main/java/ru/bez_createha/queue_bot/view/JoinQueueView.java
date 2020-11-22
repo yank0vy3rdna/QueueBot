@@ -1,5 +1,7 @@
 package ru.bez_createha.queue_bot.view;
 
+import org.hibernate.LazyInitializationException;
+import org.springframework.aop.scope.ScopedProxyUtils;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
@@ -42,44 +44,50 @@ public class JoinQueueView implements CallbackCommand {
         Long queue_id = Long.valueOf(splitted[1]);
         Long group_id = Long.valueOf(splitted[2]);
         Queue queue = queueService.getById(queue_id);
-        if (queue.getGroupId().getId().equals(group_id) && queue.getStatus().equals(QueueStatus.ACTIVE)) {
-            if (queue.getQueue_users().stream().noneMatch(
-                    user1 -> user1.getUserId().equals(user.getUserId())
-            )) {
-                queueService.putUser(queue, user);
-            } else {
-                queueService.removeUser(queue, user);
+        try {
+            if (queue.getId() != null) {
+                if (queue.getGroupId().getId().equals(group_id) && queue.getStatus().equals(QueueStatus.ACTIVE)) {
+                    if (queue.getQueue_users().stream().noneMatch(
+                            user1 -> user1.getUserId().equals(user.getUserId())
+                    )) {
+                        queueService.putUser(queue, user);
+                    } else {
+                        queueService.removeUser(queue, user);
+                    }
+
+                    EditMessageText editMessageText = new EditMessageText();
+                    editMessageText.setChatId(callbackQuery.getMessage().getChatId().toString());
+                    StringBuilder stringBuilder = new StringBuilder();
+                    stringBuilder.append("Очередь ");
+                    stringBuilder.append(queue.getTag());
+                    stringBuilder.append(" запущена!");
+                    if (!queue.getQueue_users().isEmpty()) {
+                        stringBuilder.append("\n\nОчередь:\n");
+                        for (User user_in_queue : queue.getQueue_users()) {
+                            stringBuilder.append("\n");
+                            stringBuilder.append(user_in_queue.getName());
+                        }
+                    }
+                    editMessageText.setMessageId(callbackQuery.getMessage().getMessageId());
+                    editMessageText.setText(stringBuilder.toString());
+                    InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+                    inlineKeyboardMarkup.setKeyboard(
+                            Collections.singletonList(
+                                    Collections.singletonList(
+                                            telegramUtil.createInlineKeyboardButton("Записаться/Отписаться",
+                                                    "join_queue::" +
+                                                            queue.getId() +
+                                                            "::" +
+                                                            queue.getGroupId().getId()
+                                            )
+                                    )
+                            )
+                    );
+                    editMessageText.setReplyMarkup(inlineKeyboardMarkup);
+                    bot.execute(editMessageText);
+                }
             }
+        } catch (LazyInitializationException ignored) {
         }
-        EditMessageText editMessageText = new EditMessageText();
-        editMessageText.setChatId(callbackQuery.getMessage().getChatId().toString());
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Очередь ");
-        stringBuilder.append(queue.getTag());
-        stringBuilder.append(" запущена!");
-        if (!queue.getQueue_users().isEmpty()) {
-            stringBuilder.append("\n\nОчередь:\n");
-            for (User user_in_queue : queue.getQueue_users()) {
-                stringBuilder.append("\n");
-                stringBuilder.append(user_in_queue.getName());
-            }
-        }
-        editMessageText.setMessageId(callbackQuery.getMessage().getMessageId());
-        editMessageText.setText(stringBuilder.toString());
-        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
-        inlineKeyboardMarkup.setKeyboard(
-                Collections.singletonList(
-                        Collections.singletonList(
-                                telegramUtil.createInlineKeyboardButton("Записаться/Отписаться",
-                                        "join_queue::" +
-                                                queue.getId() +
-                                                "::" +
-                                                queue.getGroupId().getId()
-                                )
-                        )
-                )
-        );
-        editMessageText.setReplyMarkup(inlineKeyboardMarkup);
-        bot.execute(editMessageText);
     }
 }
