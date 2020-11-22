@@ -139,8 +139,8 @@ public class SaveTime implements MessageCommand {
         Date tempHourseAndMinutes = new Date();
 
         try {
-            chosenHourseAndMinutes = time_formate.parse(year + ":" + month + ":" + day + " " + hours+":"+minutes);
-            tempHourseAndMinutes = time_formate.parse(current_year + ":" + current_month + ":" + current_day + " " + current_hour + ":" + current_minute);
+            chosenHourseAndMinutes = time_formate.parse(year + "-" + month + "-" + day + " " + hours+":"+minutes);
+            tempHourseAndMinutes = time_formate.parse(current_year + "-" + current_month + "-" + current_day + " " + current_hour + ":" + current_minute);
         }catch (ParseException ex) {/*NOPE*/}
 
         return chosenHourseAndMinutes.before(tempHourseAndMinutes);
