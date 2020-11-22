@@ -41,13 +41,9 @@ public class StopMenu implements CallbackCommand{
     @Override
     public void process(CallbackQuery callbackQuery, User user, Bot bot) throws TelegramApiException {
         user.setBotState(State.QUEUE_MENU_DELETE.toString());
-
-        Queue queue = queueService.getById(Long.valueOf(callbackQuery.getData().split("::")[1]));
-        queue.setStatus(QueueStatus.FINISHED);
-        queueService.save(queue);
-
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
 
+        Queue queue = queueService.getById(Long.valueOf(callbackQuery.getData().split("::")[1]));
 
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         keyboard.add(Collections.singletonList(telegramUtil.createInlineKeyboardButton(
@@ -60,7 +56,16 @@ public class StopMenu implements CallbackCommand{
         editMessageText.setMessageId(user.getMessageId());
         editMessageText.setReplyMarkup(inlineKeyboardMarkup);
         editMessageText.setChatId(callbackQuery.getMessage().getChatId().toString());
-        editMessageText.setText("Очередь остановлена");
+
+        if (queue.getStatus().equals(QueueStatus.FINISHED)){
+
+            editMessageText.setText("Очередь уже остановлена");
+        }else {
+            queue.setStatus(QueueStatus.FINISHED);
+            queueService.save(queue);
+
+            editMessageText.setText("Очередь остановлена");
+        }
         bot.execute(editMessageText);
     }
 }
