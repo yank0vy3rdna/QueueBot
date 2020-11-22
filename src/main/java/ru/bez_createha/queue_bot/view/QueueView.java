@@ -57,11 +57,12 @@ public class QueueView implements CallbackCommand {
         List<Queue> queues = queueService.findAllByGroupId(group);
         List<InlineKeyboardButton> inlineKeyboardButtonsRow = new ArrayList<>();
 
-        for (int i = 0; i < queues.size(); i++) {
+        int i;
+        for (i = 0; i < queues.size(); i++) {
             InlineKeyboardButton button =
                     telegramUtil.createInlineKeyboardButton(
                             queues.get(i).getTag(),
-                            "queue::" + queues.get(i).getId()
+                            "queue::" + queues.get(i).getId()+"::"+queues.get(i).getTag()
                     );
             inlineKeyboardButtonsRow.add(button);
             if (i % 2 == 1) {
@@ -69,6 +70,10 @@ public class QueueView implements CallbackCommand {
                 inlineKeyboardButtonsRow = new ArrayList<>();
             }
         }
+        if (i % 2 == 1){
+            keyboard.add(inlineKeyboardButtonsRow);
+        }
+
         keyboard.add(Collections.singletonList(telegramUtil.createInlineKeyboardButton(
                 "Создать очередь",
                 "create_queue"

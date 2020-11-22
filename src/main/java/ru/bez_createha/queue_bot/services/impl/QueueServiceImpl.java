@@ -66,4 +66,9 @@ public class QueueServiceImpl implements QueueService {
         }
         queueRepository.save(queue);
     }
+
+    @Override
+    public void delete(Queue queue) {
+        queueRepository.delete(queue);
+    }
 }

@@ -26,8 +26,12 @@ public class HandlersRegistrator {
     private final BackQueueName backQueueName;
     private final BackCalendar backCalendar;
     private final BackTime backTime;
+    private final QueueAdminMenu queueAdminMenu;
+    private final StopMenu stopMenu;
+    private final ResultMenu resultMenu;
 
-    public HandlersRegistrator(GroupView groupView, GroupCreated groupCreated, QueueView queueView, BackGroupView backGroupView, StepOneView stepOneView, StepTwoView stepTwoView, CalendarBack calendarBack, CalendarForward calendarForward, SaveDate saveData, SaveTime saveTime, JoinQueueView joinQueueView, GroupDeleted groupDeleted, BackQueueName backQueueName, BackCalendar backCalendar, BackTime backTime) {
+
+    public HandlersRegistrator(GroupView groupView, GroupCreated groupCreated, QueueView queueView, BackGroupView backGroupView, StepOneView stepOneView, StepTwoView stepTwoView, CalendarBack calendarBack, CalendarForward calendarForward, SaveDate saveData, SaveTime saveTime, JoinQueueView joinQueueView, GroupDeleted groupDeleted, BackQueueName backQueueName, BackCalendar backCalendar, BackTime backTime, QueueAdminMenu queueAdminMenu, StopMenu stopMenu, ResultMenu resultMenu) {
         this.groupView = groupView;
         this.stepTwoView = stepTwoView;
         this.groupCreated = groupCreated;
@@ -43,6 +47,10 @@ public class HandlersRegistrator {
         this.backQueueName = backQueueName;
         this.backCalendar = backCalendar;
         this.backTime = backTime;
+        this.queueAdminMenu = queueAdminMenu;
+        this.stopMenu = stopMenu;
+        this.resultMenu = resultMenu;
+
     }
 
     public void registerAllHandlers(TelegramController telegramController){
@@ -61,5 +69,8 @@ public class HandlersRegistrator {
         telegramController.registerCallbackHandler(saveData);
         telegramController.registerMessageHandler(saveTime);
         telegramController.registerCallbackHandler(joinQueueView);
+        telegramController.registerCallbackHandler(queueAdminMenu);
+        telegramController.registerCallbackHandler(stopMenu);
+        telegramController.registerCallbackHandler(resultMenu);
     }
 }

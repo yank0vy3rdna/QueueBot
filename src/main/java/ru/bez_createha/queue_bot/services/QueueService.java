@@ -14,4 +14,5 @@ public interface QueueService {
     void putUser(Queue queue, User user);
     void removeUser(Queue queue, User user);
     void save(Queue queue);
+    void delete(Queue queue);
 }
