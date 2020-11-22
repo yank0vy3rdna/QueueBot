@@ -1,7 +1,6 @@
 package ru.bez_createha.queue_bot.view.createQueue;
 
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
@@ -20,14 +19,12 @@ import ru.bez_createha.queue_bot.scheduler.QueueScheduler;
 import ru.bez_createha.queue_bot.services.QueueService;
 import ru.bez_createha.queue_bot.utils.InlineButton;
 import ru.bez_createha.queue_bot.view.MessageCommand;
+import ru.bez_createha.queue_bot.view.backs.BackQueueCreated;
+import ru.bez_createha.queue_bot.view.backs.BackResultOfQueue;
 
-import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.function.Predicate;
 
 @Component
@@ -36,13 +33,15 @@ public class SaveTime implements MessageCommand {
     private final QueueService queueService;
     private final InlineButton telegramUtil;
     private final QueueScheduler queueScheduler;
+    private final BackQueueCreated backQueueCreated;
 
 
-    public SaveTime(UserContext userContext, QueueService queueService, InlineButton telegramUtil, QueueScheduler queueScheduler) {
+    public SaveTime(UserContext userContext, QueueService queueService, InlineButton telegramUtil, QueueScheduler queueScheduler, BackResultOfQueue backResultOfQueue, BackQueueCreated backQueueCreated) {
         this.userContext = userContext;
         this.queueService = queueService;
         this.telegramUtil = telegramUtil;
         this.queueScheduler = queueScheduler;
+        this.backQueueCreated = backQueueCreated;
     }
 
     @Override
@@ -57,54 +56,81 @@ public class SaveTime implements MessageCommand {
 
     @Override
     public void process(Message message, User user, Bot bot) throws TelegramApiException {
-        user.setBotState(State.GROUP_MENU.toString());
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
-        EditMessageText editMessageText = new EditMessageText();
-        editMessageText.setMessageId(user.getMessageId());
-        editMessageText.setChatId(message.getChatId().toString());
-        try {
-            simpleDateFormat.parse(message.getText());
-            String[] splitted = message.getText().split(":");
+        String[] splitted = message.getText().split(":");
+        Integer chosen_hour = Integer.valueOf(splitted[0]);
+        Integer chosen_minets = Integer.valueOf(splitted[1]);
 
-            RawQueue rawQueue = userContext.getUserStaff(user.getUserId()).getRawQueue();
-            rawQueue.setHrs_start(Integer.valueOf(splitted[0]));
-            rawQueue.setMin_start(Integer.valueOf(splitted[1]));
-            Date date = rawQueue.buildDate();
-            Queue queue = new Queue();
-            queue.setGroupId(userContext.getUserStaff(user.getUserId()).getGroup());
-            queue.setStatus(QueueStatus.NOT_STARTED);
-            queue.setStartTime(date);
-            queue.setTag(userContext.getUserStaff(user.getUserId()).getRawQueue().getName());
-            queueService.save(queue);
-            InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
 
-            List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
-            keyboard.add(Collections.singletonList(telegramUtil.createInlineKeyboardButton(
-                    "Назад",
-                    "back"
-            )));
-            inlineKeyboardMarkup.setKeyboard(keyboard);
-            editMessageText.setReplyMarkup(inlineKeyboardMarkup);
-//            try {
-            queueScheduler.createJob(queue, bot);
-            editMessageText.setText("Очередь создана");
+        List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
+        keyboard.add(Collections.singletonList(telegramUtil.createInlineKeyboardButton(
+                "Назад",
+                "back"
+        )));
+        inlineKeyboardMarkup.setKeyboard(keyboard);
 
-
-            SendMessage sendMessage = new SendMessage();
-            sendMessage.setChatId(String.valueOf(queue.getGroupId().getChatId()));
-            sendMessage.setText("Очередь \""+queue.getTag()+"\" создана.\n Начало: "+date.toString());
-            bot.execute(sendMessage);
-//            } catch (SchedulerException e) {
-//                //
-//                editMessageText.setText("Матовый");
-//            }
-        } catch (ParseException exception) {
-            editMessageText.setText("Неверный формат. Введи время в формате HH:mm");
-        }
         DeleteMessage deleteMessage = new DeleteMessage();
         deleteMessage.setChatId(message.getChatId().toString());
         deleteMessage.setMessageId(message.getMessageId());
-        bot.execute(editMessageText);
+
+        if (checkIfDeprecetedTime(chosen_hour, chosen_minets)) {
+            EditMessageText editMessageText = new EditMessageText();
+            editMessageText.setMessageId(user.getMessageId());
+            editMessageText.setChatId(message.getChatId().toString());
+            editMessageText.setText("Указанное время должно быть с запасов как минимум 15 минут.");
+            editMessageText.setReplyMarkup(inlineKeyboardMarkup);
+            bot.execute(editMessageText);
+        }else {
+            user.setBotState(State.GROUP_MENU.toString());
+            EditMessageText editMessageText = new EditMessageText();
+            editMessageText.setMessageId(user.getMessageId());
+            editMessageText.setChatId(message.getChatId().toString());
+            try {
+                simpleDateFormat.parse(message.getText());
+
+                RawQueue rawQueue = userContext.getUserStaff(user.getUserId()).getRawQueue();
+                rawQueue.setHrs_start(Integer.valueOf(splitted[0]));
+                rawQueue.setMin_start(Integer.valueOf(splitted[1]));
+                Date date = rawQueue.buildDate();
+                Queue queue = new Queue();
+                queue.setGroupId(userContext.getUserStaff(user.getUserId()).getGroup());
+                queue.setStatus(QueueStatus.NOT_STARTED);
+                queue.setStartTime(date);
+                queue.setTag(userContext.getUserStaff(user.getUserId()).getRawQueue().getName());
+                queueService.save(queue);
+
+                editMessageText.setReplyMarkup(inlineKeyboardMarkup);
+
+                queueScheduler.createJob(queue, bot);
+                editMessageText.setText("Очередь создана");
+
+
+                SendMessage sendMessage = new SendMessage();
+                sendMessage.setChatId(String.valueOf(queue.getGroupId().getChatId()));
+                sendMessage.setText("Очередь \"" + queue.getTag() + "\" создана.\n Начало: " + date.toString());
+                bot.execute(sendMessage);
+            } catch (ParseException exception) {
+                editMessageText.setText("Неверный формат. Введи время в формате HH:mm");
+            }
+            bot.execute(editMessageText);
+        }
         bot.execute(deleteMessage);
+    }
+
+    private boolean checkIfDeprecetedTime(Integer hours, Integer minutes) {
+        SimpleDateFormat time_formate = new SimpleDateFormat("HH:mm");
+        Integer temp_hour = Calendar.getInstance().get(Calendar.HOUR);
+        Integer temp_minute = Calendar.getInstance().get(Calendar.MINUTE) + 15;
+
+        Date chosenHourseAndMinutes = new Date();
+        Date tempHourseAndMinutes = new Date();
+
+        try {
+            chosenHourseAndMinutes = time_formate.parse(hours+":"+minutes);
+            tempHourseAndMinutes = time_formate.parse(temp_hour+":"+temp_minute);
+        }catch (ParseException ex) {/*NOPE*/}
+
+        return chosenHourseAndMinutes.before(tempHourseAndMinutes);
     }
 }
