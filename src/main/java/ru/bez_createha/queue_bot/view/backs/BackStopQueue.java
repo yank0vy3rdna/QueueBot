@@ -23,7 +23,7 @@ public class BackStopQueue implements Back {
 
     @Override
     public Predicate<String> statePredicate() {
-        return s -> s.equals(State.QUEUE_MENU_DELETE.toString());
+        return s -> s.equals(State.QUEUE_MENU_STOP.toString());
     }
 
     @Override

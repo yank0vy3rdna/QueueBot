@@ -30,9 +30,10 @@ public class HandlersRegistrator {
     private final BackResultOfQueue backResultOfQueue;
     private final BackQueueAdmin backQueueAdmin;
     private final BackStopQueue backStopQueue;
+    private final DeleteMenu deleteMenu;
 
 
-    public HandlersRegistrator(GroupView groupView, GroupCreated groupCreated, QueueView queueView, BackGroupView backGroupView, StepOneView stepOneView, StepTwoView stepTwoView, CalendarBack calendarBack, CalendarForward calendarForward, SaveDate saveData, SaveTime saveTime, JoinQueueView joinQueueView, GroupDeleted groupDeleted, BackQueueName backQueueName, BackCalendar backCalendar, BackTime backTime, QueueAdminMenu queueAdminMenu, StopMenu stopMenu, ResultMenu resultMenu, BackQueueCreated backQueueCreated, QueueAdminMenu queueAdminMenu1, StopMenu stopMenu1, ResultMenu resultMenu1, BackResultOfQueue backResultOfQueue, BackQueueAdmin backQueueAdmin, BackStopQueue backStopQueue) {
+    public HandlersRegistrator(GroupView groupView, GroupCreated groupCreated, QueueView queueView, BackGroupView backGroupView, StepOneView stepOneView, StepTwoView stepTwoView, CalendarBack calendarBack, CalendarForward calendarForward, SaveDate saveData, SaveTime saveTime, JoinQueueView joinQueueView, GroupDeleted groupDeleted, BackQueueName backQueueName, BackCalendar backCalendar, BackTime backTime, QueueAdminMenu queueAdminMenu, StopMenu stopMenu, ResultMenu resultMenu, BackQueueCreated backQueueCreated, QueueAdminMenu queueAdminMenu1, StopMenu stopMenu1, ResultMenu resultMenu1, BackResultOfQueue backResultOfQueue, BackQueueAdmin backQueueAdmin, BackStopQueue backStopQueue, DeleteMenu deleteMenu) {
         this.groupView = groupView;
         this.stepTwoView = stepTwoView;
         this.groupCreated = groupCreated;
@@ -55,6 +56,7 @@ public class HandlersRegistrator {
         this.backResultOfQueue = backResultOfQueue;
         this.backQueueAdmin = backQueueAdmin;
         this.backStopQueue = backStopQueue;
+        this.deleteMenu = deleteMenu;
     }
 
     public void registerAllHandlers(TelegramController telegramController){
@@ -80,5 +82,6 @@ public class HandlersRegistrator {
         telegramController.registerCallbackHandler(queueAdminMenu);
         telegramController.registerCallbackHandler(stopMenu);
         telegramController.registerCallbackHandler(resultMenu);
+        telegramController.registerCallbackHandler(deleteMenu);
     }
 }
