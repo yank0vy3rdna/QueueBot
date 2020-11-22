@@ -25,14 +25,18 @@ public class Queue extends IdBaseEntity {
     @Enumerated(EnumType.STRING)
     private QueueStatus status;
 
-    @Cascade(org.hibernate.annotations.CascadeType.DELETE)
-    @ManyToMany(cascade = {CascadeType.ALL})
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "queue_users",
             joinColumns = @JoinColumn(name = "id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> queue_users;
 
-    @Cascade(org.hibernate.annotations.CascadeType.DELETE)
+    @PreRemove
+    public void removePositions() {
+        queue_users.forEach(user -> user.getQueues().remove(this));
+    }
+
     @ManyToOne(cascade = { CascadeType.MERGE }, fetch = FetchType.EAGER)
     @JoinColumn(name = "group_id", referencedColumnName = "id")
     private Group groupId;

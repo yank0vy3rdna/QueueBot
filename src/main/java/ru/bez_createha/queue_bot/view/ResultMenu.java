@@ -7,6 +7,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.bez_createha.queue_bot.Bot;
+import ru.bez_createha.queue_bot.context.UserContext;
 import ru.bez_createha.queue_bot.model.Queue;
 import ru.bez_createha.queue_bot.model.State;
 import ru.bez_createha.queue_bot.model.User;
@@ -20,12 +21,12 @@ import java.util.function.Predicate;
 
 @Component
 public class ResultMenu implements CallbackCommand{
-    private final QueueService queueService;
     private final InlineButton telegramUtil;
+    private final UserContext userContext;
 
-    public ResultMenu(QueueService queueService, InlineButton telegramUtil) {
-        this.queueService = queueService;
+    public ResultMenu(InlineButton telegramUtil, UserContext userContext) {
         this.telegramUtil = telegramUtil;
+        this.userContext = userContext;
     }
 
     @Override
@@ -42,12 +43,12 @@ public class ResultMenu implements CallbackCommand{
     public void process(CallbackQuery callbackQuery, User user, Bot bot) throws TelegramApiException {
         user.setBotState(State.QUEUE_MENU_RESULT.toString());
 
-        Queue queue = queueService.getById(Long.valueOf(callbackQuery.getData().split("::")[1]));
+        Queue queue = userContext.getUserStaff(user.getUserId()).getQueue();
         StringBuilder stringBuilder = new StringBuilder();
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
 
         if (!queue.getQueue_users().isEmpty()) {
-            stringBuilder.append("\n\nОчередь " +callbackQuery.getData().split("::")[2]+":\n");
+            stringBuilder.append("\n\nОчередь ").append(queue.getTag()).append(":\n");
             for (User user_in_queue : queue.getQueue_users()) {
                 stringBuilder.append("\n");
                 stringBuilder.append(user_in_queue.getName());

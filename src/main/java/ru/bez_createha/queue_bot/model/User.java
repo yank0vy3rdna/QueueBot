@@ -1,6 +1,7 @@
 package ru.bez_createha.queue_bot.model;
 
 import lombok.*;
+import org.hibernate.annotations.Cascade;
 
 
 import javax.persistence.*;
