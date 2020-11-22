@@ -99,8 +99,13 @@ public class SimpleCalendar {
         row.add(telegramUtil.createInlineKeyboardButton("<", "calendar_back"));
         row.add(telegramUtil.createInlineKeyboardButton(" ", "nope"));
         row.add(telegramUtil.createInlineKeyboardButton(">", "calendar_forward"));
-
         keyboardButtons.add(row);
+
+        row = new ArrayList<>();
+
+        row.add(telegramUtil.createInlineKeyboardButton("Назад", "back"));
+        keyboardButtons.add(row);
+
         return keyboardButtons;
     }
 

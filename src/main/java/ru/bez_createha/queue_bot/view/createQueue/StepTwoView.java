@@ -48,7 +48,6 @@ public class StepTwoView implements MessageCommand {
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         inlineKeyboardMarkup.setKeyboard(simpleCalendar.createCalendar());
         user.setBotState(State.ENTER_QUEUE_DATE.toString());
-        List<BotApiMethod<? extends Serializable>> methods = new ArrayList<>();
 
 
         EditMessageText editMessageText = new EditMessageText();
