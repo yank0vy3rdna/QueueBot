@@ -11,7 +11,7 @@ import javax.persistence.MappedSuperclass;
 @Getter
 @Setter
 public abstract class TgBaseEntity extends IdBaseEntity{
-    @Column(name = "chat_id")
+    @Column(name = "chat_id", unique = true)
     private Long chatId;
 
 }
