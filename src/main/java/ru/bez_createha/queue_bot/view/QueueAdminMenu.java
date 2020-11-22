@@ -7,21 +7,27 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.bez_createha.queue_bot.Bot;
+import ru.bez_createha.queue_bot.context.UserContext;
+import ru.bez_createha.queue_bot.model.Queue;
 import ru.bez_createha.queue_bot.model.State;
 import ru.bez_createha.queue_bot.model.User;
+import ru.bez_createha.queue_bot.services.QueueService;
 import ru.bez_createha.queue_bot.utils.InlineButton;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
 
 @Component
 public class QueueAdminMenu implements CallbackCommand {
     private final InlineButton telegramUtil;
+    private final QueueService queueService;
+    private final UserContext userContext;
 
-    public QueueAdminMenu(InlineButton telegramUtil) {
+    public QueueAdminMenu(InlineButton telegramUtil, QueueService queueService, UserContext userContext) {
         this.telegramUtil = telegramUtil;
+        this.queueService = queueService;
+        this.userContext = userContext;
     }
 
     @Override
@@ -38,6 +44,8 @@ public class QueueAdminMenu implements CallbackCommand {
     public void process(CallbackQuery callbackQuery, User user, Bot bot) throws TelegramApiException {
 
         user.setBotState(State.QUEUE_MENU_PANEL.toString());
+        Queue queue = queueService.getById(Long.valueOf(callbackQuery.getData().split("::")[1]));
+        userContext.getUserStaff(user.getUserId()).setQueue(queue);
         List<InlineKeyboardButton> keyboardButtonsRaw = new ArrayList<>();
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
 
@@ -45,7 +53,7 @@ public class QueueAdminMenu implements CallbackCommand {
 
         keyboardButtonsRaw.add(telegramUtil.createInlineKeyboardButton(
                 "Посмотреть результат",
-                "get_queues::"+callbackQuery.getData().split("::")[1]+"::"+callbackQuery.getData().split("::")[2]
+                "get_queues"
         ));
 
         keyboard.add(keyboardButtonsRaw);
@@ -53,7 +61,7 @@ public class QueueAdminMenu implements CallbackCommand {
 
         keyboardButtonsRaw.add(telegramUtil.createInlineKeyboardButton(
                 "Остановить",
-                "stop::"+callbackQuery.getData().split("::")[1]
+                "stop"
         ));
         keyboardButtonsRaw.add(telegramUtil.createInlineKeyboardButton(
                 "Назад",
@@ -67,7 +75,7 @@ public class QueueAdminMenu implements CallbackCommand {
         EditMessageText editMessageText = new EditMessageText();
         editMessageText.setMessageId(user.getMessageId());
         editMessageText.setChatId(callbackQuery.getMessage().getChatId().toString());
-        editMessageText.setText("Выбранная очередь - "+callbackQuery.getData().split("::")[2]);
+        editMessageText.setText("Выбранная очередь - "+queue.getTag());
         editMessageText.setReplyMarkup(inlineKeyboardMarkup);
         bot.execute(editMessageText);
     }

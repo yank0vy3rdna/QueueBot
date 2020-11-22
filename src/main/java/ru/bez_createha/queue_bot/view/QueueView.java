@@ -62,7 +62,7 @@ public class QueueView implements CallbackCommand {
             InlineKeyboardButton button =
                     telegramUtil.createInlineKeyboardButton(
                             queues.get(i).getTag(),
-                            "queue::" + queues.get(i).getId()+"::"+queues.get(i).getTag()
+                            "queue::" + queues.get(i).getId()
                     );
             inlineKeyboardButtonsRow.add(button);
             if (i % 2 == 1) {

@@ -7,6 +7,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.bez_createha.queue_bot.Bot;
+import ru.bez_createha.queue_bot.context.UserContext;
 import ru.bez_createha.queue_bot.model.Queue;
 import ru.bez_createha.queue_bot.model.QueueStatus;
 import ru.bez_createha.queue_bot.model.State;
@@ -23,10 +24,12 @@ import java.util.function.Predicate;
 public class StopMenu implements CallbackCommand{
     private final QueueService queueService;
     private final InlineButton telegramUtil;
+    private final UserContext userContext;
 
-    public StopMenu(QueueService queueService, InlineButton telegramUtil) {
+    public StopMenu(QueueService queueService, InlineButton telegramUtil, UserContext userContext) {
         this.queueService = queueService;
         this.telegramUtil = telegramUtil;
+        this.userContext = userContext;
     }
 
     @Override
@@ -42,7 +45,7 @@ public class StopMenu implements CallbackCommand{
     public void process(CallbackQuery callbackQuery, User user, Bot bot) throws TelegramApiException {
         user.setBotState(State.QUEUE_MENU_DELETE.toString());
 
-        Queue queue = queueService.getById(Long.valueOf(callbackQuery.getData().split("::")[1]));
+        Queue queue = userContext.getUserStaff(user.getUserId()).getQueue();
         queue.setStatus(QueueStatus.FINISHED);
         queueService.save(queue);
 
