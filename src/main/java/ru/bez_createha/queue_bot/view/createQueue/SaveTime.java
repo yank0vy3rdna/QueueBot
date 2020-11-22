@@ -115,7 +115,7 @@ public class SaveTime implements MessageCommand {
                 bot.execute(sendMessage);
                 bot.execute(editMessageText);
             }
-        }catch (ParseException exception) {
+        }catch (ParseException | NumberFormatException exception) {
             editMessageText.setText("Неверный формат. Введи время в формате HH:mm");
             bot.execute(editMessageText);
         }
