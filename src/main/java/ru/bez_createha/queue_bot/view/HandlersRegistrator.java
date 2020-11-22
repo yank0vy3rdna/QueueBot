@@ -19,8 +19,9 @@ public class HandlersRegistrator {
     private final SaveDate saveData;
     private final SaveTime saveTime;
     private final JoinQueueView joinQueueView;
+    private final GroupDeleted groupDeleted;
 
-    public HandlersRegistrator(GroupView groupView, GroupCreated groupCreated, QueueView queueView, BackGroupView backGroupView, StepOneView stepOneView, StepTwoView stepTwoView, CalendarBack calendarBack, CalendarForward calendarForward, SaveDate saveData, SaveTime saveTime, JoinQueueView joinQueueView) {
+    public HandlersRegistrator(GroupView groupView, GroupCreated groupCreated, QueueView queueView, BackGroupView backGroupView, StepOneView stepOneView, StepTwoView stepTwoView, CalendarBack calendarBack, CalendarForward calendarForward, SaveDate saveData, SaveTime saveTime, JoinQueueView joinQueueView, GroupDeleted groupDeleted) {
         this.groupView = groupView;
         this.stepTwoView = stepTwoView;
         this.groupCreated = groupCreated;
@@ -32,9 +33,11 @@ public class HandlersRegistrator {
         this.saveData = saveData;
         this.saveTime = saveTime;
         this.joinQueueView = joinQueueView;
+        this.groupDeleted = groupDeleted;
     }
 
     public void registerAllHandlers(TelegramController telegramController){
+        telegramController.registerMessageHandler(groupDeleted);
         telegramController.registerMessageHandler(groupCreated);
         telegramController.registerMessageHandler(groupView);
         telegramController.registerMessageHandler(stepTwoView);

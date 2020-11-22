@@ -8,7 +8,7 @@ import ru.bez_createha.queue_bot.model.User;
 import java.util.List;
 
 public interface QueueService {
-    List<Queue> findByGroupId(Group groupId);
+    List<Queue> findAllByGroupId(Group groupId);
     List<Queue> findAllByStatus(QueueStatus status);
     Queue getById(Long queue_id);
     void putUser(Queue queue, User user);

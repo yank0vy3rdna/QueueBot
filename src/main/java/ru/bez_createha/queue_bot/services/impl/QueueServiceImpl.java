@@ -26,7 +26,7 @@ public class QueueServiceImpl implements QueueService {
     }
 
     @Override
-    public List<Queue> findByGroupId(Group groupId) {
+    public List<Queue> findAllByGroupId(Group groupId) {
         return queueRepository.findAllByGroupId(groupId);
     }
 
