@@ -53,6 +53,8 @@ public class ResultMenu implements CallbackCommand{
                 stringBuilder.append("\n");
                 stringBuilder.append(user_in_queue.getName());
             }
+        }else {
+            stringBuilder.append("Очередь пуста");
         }
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         keyboard.add(Collections.singletonList(telegramUtil.createInlineKeyboardButton(

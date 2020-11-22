@@ -2,6 +2,7 @@ package ru.bez_createha.queue_bot.view.createQueue;
 
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -87,6 +88,12 @@ public class SaveTime implements MessageCommand {
 //            try {
             queueScheduler.createJob(queue, bot);
             editMessageText.setText("Очередь создана");
+
+
+            SendMessage sendMessage = new SendMessage();
+            sendMessage.setChatId(String.valueOf(queue.getGroupId().getChatId()));
+            sendMessage.setText("Очередь \""+queue.getTag()+"\" создана.\n Начало: "+date.toString());
+            bot.execute(sendMessage);
 //            } catch (SchedulerException e) {
 //                //
 //                editMessageText.setText("Матовый");

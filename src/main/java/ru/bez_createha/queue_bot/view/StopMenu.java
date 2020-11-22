@@ -63,7 +63,16 @@ public class StopMenu implements CallbackCommand{
         editMessageText.setMessageId(user.getMessageId());
         editMessageText.setReplyMarkup(inlineKeyboardMarkup);
         editMessageText.setChatId(callbackQuery.getMessage().getChatId().toString());
-        editMessageText.setText("Очередь остановлена");
+
+        if (queue.getStatus().equals(QueueStatus.FINISHED)){
+
+            editMessageText.setText("Очередь уже остановлена");
+        }else {
+            queue.setStatus(QueueStatus.FINISHED);
+            queueService.save(queue);
+
+            editMessageText.setText("Очередь остановлена");
+        }
         bot.execute(editMessageText);
     }
 }
