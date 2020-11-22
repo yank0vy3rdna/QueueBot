@@ -31,6 +31,7 @@ public class UserServiceImpl implements UserService {
         user.setUserId(userId);
         user.setName(name);
         user.setBotState(State.GROUP_MENU.toString());
+        userRepository.save(user);
         return user;
     }
 
