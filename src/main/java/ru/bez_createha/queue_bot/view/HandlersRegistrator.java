@@ -28,9 +28,8 @@ public class HandlersRegistrator {
     private final StopMenu stopMenu;
     private final ResultMenu resultMenu;
 
-    public HandlersRegistrator(GroupView groupView, GroupCreated groupCreated, QueueView queueView, BackGroupView backGroupView, StepOneView stepOneView, StepTwoView stepTwoView, CalendarBack calendarBack, CalendarForward calendarForward, SaveDate saveData, SaveTime saveTime, JoinQueueView joinQueueView, GroupDeleted groupDeleted, BackQueueName backQueueName, BackCalendar backCalendar, BackTime backTime, BackQueueCreated backQueueCreated) {
 
-    public HandlersRegistrator(GroupView groupView, GroupCreated groupCreated, QueueView queueView, BackGroupView backGroupView, StepOneView stepOneView, StepTwoView stepTwoView, CalendarBack calendarBack, CalendarForward calendarForward, SaveDate saveData, SaveTime saveTime, JoinQueueView joinQueueView, GroupDeleted groupDeleted, BackQueueName backQueueName, BackCalendar backCalendar, BackTime backTime, QueueAdminMenu queueAdminMenu, StopMenu stopMenu, ResultMenu resultMenu) {
+    public HandlersRegistrator(GroupView groupView, GroupCreated groupCreated, QueueView queueView, BackGroupView backGroupView, StepOneView stepOneView, StepTwoView stepTwoView, CalendarBack calendarBack, CalendarForward calendarForward, SaveDate saveData, SaveTime saveTime, JoinQueueView joinQueueView, GroupDeleted groupDeleted, BackQueueName backQueueName, BackCalendar backCalendar, BackTime backTime, QueueAdminMenu queueAdminMenu, StopMenu stopMenu, ResultMenu resultMenu, BackQueueCreated backQueueCreated, QueueAdminMenu queueAdminMenu1, StopMenu stopMenu1, ResultMenu resultMenu1) {
         this.groupView = groupView;
         this.stepTwoView = stepTwoView;
         this.groupCreated = groupCreated;
@@ -47,6 +46,9 @@ public class HandlersRegistrator {
         this.backCalendar = backCalendar;
         this.backTime = backTime;
         this.backQueueCreated = backQueueCreated;
+        this.queueAdminMenu = queueAdminMenu1;
+        this.stopMenu = stopMenu1;
+        this.resultMenu = resultMenu1;
     }
 
     public void registerAllHandlers(TelegramController telegramController){
