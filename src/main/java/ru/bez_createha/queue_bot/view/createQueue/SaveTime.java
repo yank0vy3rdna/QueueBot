@@ -70,13 +70,6 @@ public class SaveTime implements MessageCommand {
         editMessageText.setChatId(message.getChatId().toString());
 
         try {
-            chosen_hour = Integer.valueOf(splitted[0]);
-            chosen_minets = Integer.valueOf(splitted[1]);
-
-            Integer day_start = userContext.getUserStaff(user.getUserId()).getRawQueue().getDay_start();
-            Integer month_start = userContext.getUserStaff(user.getUserId()).getRawQueue().getMonth_start();
-            Integer year_start = userContext.getUserStaff(user.getUserId()).getRawQueue().getYear_start();
-
             InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
 
             List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
@@ -85,11 +78,19 @@ public class SaveTime implements MessageCommand {
                     "back"
             )));
             inlineKeyboardMarkup.setKeyboard(keyboard);
+            editMessageText.setReplyMarkup(inlineKeyboardMarkup);
+
+            chosen_hour = Integer.valueOf(splitted[0]);
+            chosen_minets = Integer.valueOf(splitted[1]);
+
+            Integer day_start = userContext.getUserStaff(user.getUserId()).getRawQueue().getDay_start();
+            Integer month_start = userContext.getUserStaff(user.getUserId()).getRawQueue().getMonth_start();
+            Integer year_start = userContext.getUserStaff(user.getUserId()).getRawQueue().getYear_start();
 
             if (checkIfDeprecatedTime(year_start, month_start, day_start, chosen_hour, chosen_minets)) {
 
-                editMessageText.setText("Указанное время должно быть с запасов как минимум 15 минут.");
-                editMessageText.setReplyMarkup(inlineKeyboardMarkup);
+                editMessageText.setText("Указанное время должно быть с запасов как минимум 15 минут.\nПопробуйте ввести время в формате HH:mm снова или вернитесь назад.");
+
                 bot.execute(editMessageText);
             }else {
                 user.setBotState(State.GROUP_MENU.toString());
