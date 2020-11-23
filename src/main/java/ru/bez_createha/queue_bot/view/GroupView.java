@@ -42,7 +42,7 @@ public class GroupView implements MessageCommand {
 
     @Override
     public Predicate<Message> messagePredicate() {
-                return message -> message.getText().equals("/start");
+         return message -> message.getText().equals("/start");
     }
 
     public void process(Message message, User user, Bot bot) throws TelegramApiException {

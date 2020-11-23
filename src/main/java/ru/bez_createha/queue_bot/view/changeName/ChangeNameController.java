@@ -47,7 +47,6 @@ public class ChangeNameController implements CallbackCommand {
         user.setBotState(State.CHANGE_NAME.toString());
         user.setMessageId(callbackQuery.getMessage().getMessageId());
 
-        user.setMessageId(callbackQuery.getMessage().getMessageId());
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
 
 
