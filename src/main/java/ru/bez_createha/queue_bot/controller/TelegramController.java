@@ -39,6 +39,9 @@ public class TelegramController {
 
     public void onCallbackQuery(CallbackQuery callbackQuery, Bot bot) throws TelegramApiException {
         User user = userService.findByUserId(callbackQuery.getFrom());
+        if (user.getName() == null){
+            user.setName(callbackQuery.getFrom().getFirstName());
+        }
         userContext.initUser(user.getUserId());
         callbackInvoker.process(callbackQuery, user, bot);
         userService.saveUser(user);
