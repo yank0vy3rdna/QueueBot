@@ -50,7 +50,7 @@ public class GroupCreated implements MessageCommand{
             group.setChatId(message.getChatId());
             groupService.saveGroup(group);
 
-            response.setText("Группа добавлена, Админ группы: " + user.getName() + "\n" + "Для связи перейдите @cool_queue_bot");
+            response.setText("Группа добавлена, Админ группы: " + user.getName() + "\n" + "Для связи перейдите @" + bot.getMe().getUserName());
             bot.execute(response);
         } else {
             response.setText(user.getName() + ", лимит групп для одного пользователя - 4. Вы можете удалить группы, созданные ранее");

@@ -49,13 +49,11 @@ public class ChangeNameController implements CallbackCommand {
 
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
 
-
         EditMessageText editMessageText = new EditMessageText();
         editMessageText.setMessageId(callbackQuery.getMessage().getMessageId());
         editMessageText.setChatId(callbackQuery.getMessage().getChatId().toString());
 
         editMessageText.setReplyMarkup(inlineKeyboardMarkup);
-
 
         keyboard.add(Collections.singletonList(telegramUtil.createInlineKeyboardButton(
                 "Назад",
