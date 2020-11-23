@@ -17,6 +17,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -41,7 +42,7 @@ public class GroupView implements MessageCommand {
 
     @Override
     public Predicate<Message> messagePredicate() {
-            return message -> message.getText().equals("/start");
+                return message -> message.getText().equals("/start");
     }
 
     public void process(Message message, User user, Bot bot) throws TelegramApiException {
@@ -69,6 +70,12 @@ public class GroupView implements MessageCommand {
         if (i % 2 == 1){
             keyboard.add(inlineKeyboardButtonsRow);
         }
+
+
+        keyboard.add(Collections.singletonList(telegramUtil.createInlineKeyboardButton(
+                "Сменить имя",
+                "change_name"
+        )));
 
         inlineKeyboardMarkup.setKeyboard(keyboard);
 

@@ -31,12 +31,13 @@ public class UserServiceImpl implements UserService {
         user.setUserId(userId);
         user.setName(name);
         user.setBotState(State.GROUP_MENU.toString());
-        userRepository.save(user);
+        saveUser(user);
         return user;
     }
 
     @Override
     public void saveUser(User user) {
+
         userRepository.save(user);
     }
 

@@ -46,6 +46,9 @@ public class TelegramController {
 
     public void onMessage(Message message, Bot bot) throws TelegramApiException {
         User user = userService.findByUserId(message.getFrom());
+        if (user.getName() == null){
+            user.setName(message.getFrom().getFirstName());
+        }
         messageInvoker.process(message, user, bot);
         userService.saveUser(user);
     }

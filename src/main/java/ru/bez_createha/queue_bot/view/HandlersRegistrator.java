@@ -3,6 +3,8 @@ package ru.bez_createha.queue_bot.view;
 
 import ru.bez_createha.queue_bot.controller.TelegramController;
 import ru.bez_createha.queue_bot.view.backs.*;
+import ru.bez_createha.queue_bot.view.changeName.ChangeNameController;
+import ru.bez_createha.queue_bot.view.changeName.ChangeNameView;
 import ru.bez_createha.queue_bot.view.createQueue.*;
 import org.springframework.stereotype.Service;
 
@@ -32,9 +34,11 @@ public class HandlersRegistrator {
     private final BackStopQueue backStopQueue;
     private final BackDeleteQueue backDeleteQueue;
     private final DeleteMenu deleteMenu;
+    private final ChangeNameController changeNameController;
+    private final ChangeNameView changeNameView;
 
 
-    public HandlersRegistrator(GroupView groupView, GroupCreated groupCreated, QueueView queueView, BackGroupView backGroupView, StepOneView stepOneView, StepTwoView stepTwoView, CalendarBack calendarBack, CalendarForward calendarForward, SaveDate saveData, SaveTime saveTime, JoinQueueView joinQueueView, GroupDeleted groupDeleted, BackQueueName backQueueName, BackCalendar backCalendar, BackTime backTime, QueueAdminMenu queueAdminMenu, StopMenu stopMenu, ResultMenu resultMenu, BackQueueCreated backQueueCreated, QueueAdminMenu queueAdminMenu1, StopMenu stopMenu1, ResultMenu resultMenu1, BackResultOfQueue backResultOfQueue, BackQueueAdmin backQueueAdmin, BackStopQueue backStopQueue, BackDeleteQueue backDeleteQueue, DeleteMenu deleteMenu) {
+    public HandlersRegistrator(GroupView groupView, GroupCreated groupCreated, QueueView queueView, BackGroupView backGroupView, StepOneView stepOneView, StepTwoView stepTwoView, CalendarBack calendarBack, CalendarForward calendarForward, SaveDate saveData, SaveTime saveTime, JoinQueueView joinQueueView, GroupDeleted groupDeleted, BackQueueName backQueueName, BackCalendar backCalendar, BackTime backTime, QueueAdminMenu queueAdminMenu, StopMenu stopMenu, ResultMenu resultMenu, BackQueueCreated backQueueCreated, QueueAdminMenu queueAdminMenu1, StopMenu stopMenu1, ResultMenu resultMenu1, BackResultOfQueue backResultOfQueue, BackQueueAdmin backQueueAdmin, BackStopQueue backStopQueue, BackDeleteQueue backDeleteQueue, DeleteMenu deleteMenu, ChangeNameController changeNameController, ChangeNameView changeNameView) {
         this.groupView = groupView;
         this.stepTwoView = stepTwoView;
         this.groupCreated = groupCreated;
@@ -59,6 +63,8 @@ public class HandlersRegistrator {
         this.backStopQueue = backStopQueue;
         this.backDeleteQueue = backDeleteQueue;
         this.deleteMenu = deleteMenu;
+        this.changeNameController = changeNameController;
+        this.changeNameView = changeNameView;
     }
 
     public void registerAllHandlers(TelegramController telegramController){
@@ -66,6 +72,7 @@ public class HandlersRegistrator {
         telegramController.registerMessageHandler(groupCreated);
         telegramController.registerMessageHandler(groupView);
         telegramController.registerMessageHandler(stepTwoView);
+        telegramController.registerMessageHandler(changeNameView);
         telegramController.registerCallbackHandler(queueView);
         telegramController.registerCallbackHandler(backGroupView);
         telegramController.registerCallbackHandler(backQueueName);
@@ -86,5 +93,6 @@ public class HandlersRegistrator {
         telegramController.registerCallbackHandler(stopMenu);
         telegramController.registerCallbackHandler(resultMenu);
         telegramController.registerCallbackHandler(deleteMenu);
+        telegramController.registerCallbackHandler(changeNameController);
     }
 }

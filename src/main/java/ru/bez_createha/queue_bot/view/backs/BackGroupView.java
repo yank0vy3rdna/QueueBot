@@ -24,7 +24,7 @@ public class BackGroupView implements Back{
 
     @Override
     public Predicate<String> statePredicate() {
-        return s -> s.equals(State.QUEUE_MENU.toString());
+        return s -> (s.equals(State.QUEUE_MENU.toString()) || s.equals(State.CHANGE_NAME.toString()));
     }
 
     @Override
