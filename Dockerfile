@@ -1,4 +1,6 @@
 FROM openjdk:8
+RUN apt update
+RUN apt install -y maven
 WORKDIR /app
-COPY build/queue_bot-0.0.1.jar /app
-CMD ["java", "-jar", "queue_bot-0.0.1.jar"]
+COPY . /app
+ENTRYPOINT ["./start.sh"]
