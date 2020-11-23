@@ -36,7 +36,7 @@ public class GroupCreated implements MessageCommand{
 
     @Override
     public Predicate<Message> messagePredicate() {
-        return message -> message.getChat().getType().equals("group") && message.getNewChatMembers().get(0).getFirstName().equals(botUsername);
+        return message -> (message.getChat().getType().equals("group") || message.getChat().getType().equals("supergroup")) && message.getNewChatMembers().get(0).getFirstName().equals(botUsername);
     }
 
     public void process(Message message, User user, Bot bot) throws TelegramApiException {

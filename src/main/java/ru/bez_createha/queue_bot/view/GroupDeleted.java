@@ -36,7 +36,7 @@ public class GroupDeleted implements MessageCommand{
     @Override
     public Predicate<Message> messagePredicate() {
         return message -> { if (message.getLeftChatMember() != null) {
-            return message.getChat().getType().equals("group") && message.getLeftChatMember().getFirstName().equals(botUsername);
+            return (message.getChat().getType().equals("group") || message.getChat().getType().equals("supergroup")) && message.getLeftChatMember().getFirstName().equals(botUsername);
         } return false;};
     }
 
