@@ -42,11 +42,10 @@ public class JoinQueueView implements CallbackCommand {
     public void process(CallbackQuery callbackQuery, User user, Bot bot) throws TelegramApiException {
 
         String[] splitted = callbackQuery.getData().split("::");
-        System.out.println(splitted.length);
         Long queue_id = Long.valueOf(splitted[1]);
         Long group_id = Long.valueOf(splitted[2]);
         Queue queue = queueService.getById(queue_id);
-        EditMessageText editMessageText;
+        EditMessageText editMessageText = new EditMessageText();;
         if (queue != null) {
             if (queue.getGroupId().getId().equals(group_id) && queue.getStatus().equals(QueueStatus.ACTIVE)) {
                 if (queue.getQueue_users().stream().noneMatch(
@@ -56,7 +55,7 @@ public class JoinQueueView implements CallbackCommand {
                 } else {
                     queueService.removeUser(queue, user);
                 }
-                editMessageText = buildResponse(callbackQuery,queue);
+                editMessageText = buildResponse(callbackQuery,queue,editMessageText);
 
                 InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
                 inlineKeyboardMarkup.setKeyboard(
@@ -72,16 +71,19 @@ public class JoinQueueView implements CallbackCommand {
                         ));
                 editMessageText.setReplyMarkup(inlineKeyboardMarkup);
             }else {
-                editMessageText = buildResponse(callbackQuery,queue);
+                editMessageText = buildResponse(callbackQuery,queue,editMessageText);
             }
 
-            bot.execute(editMessageText);
+
+        }else {
+            editMessageText.setChatId(callbackQuery.getMessage().getChatId().toString());
+            editMessageText.setMessageId(callbackQuery.getMessage().getMessageId());
+            editMessageText.setText("Очередь удалена by admin");
         }
+        bot.execute(editMessageText);
     }
 
-    private EditMessageText buildResponse(CallbackQuery callbackQuery, Queue queue){
-
-        EditMessageText editMessageText = new EditMessageText();
+    private EditMessageText buildResponse(CallbackQuery callbackQuery, Queue queue, EditMessageText editMessageText){
         editMessageText.setChatId(callbackQuery.getMessage().getChatId().toString());
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Очередь ");
