@@ -40,7 +40,11 @@ public class TelegramController {
     public void onCallbackQuery(CallbackQuery callbackQuery, Bot bot) throws TelegramApiException {
         User user = userService.findByUserId(callbackQuery.getFrom());
         if (user.getName() == null){
-            user.setName(callbackQuery.getFrom().getFirstName());
+            if (callbackQuery.getFrom().getFirstName() !=null) {
+                user.setName(callbackQuery.getFrom().getFirstName());
+            }else {
+                user.setName("Ник можно изменить в л/с бота");
+            }
         }
         userContext.initUser(user.getUserId());
         callbackInvoker.process(callbackQuery, user, bot);
@@ -50,9 +54,14 @@ public class TelegramController {
     public void onMessage(Message message, Bot bot) throws TelegramApiException {
         User user = userService.findByUserId(message.getFrom());
         if (user.getName() == null){
-            user.setName(message.getFrom().getFirstName());
+            if (message.getFrom().getFirstName() !=null) {
+                user.setName(message.getFrom().getFirstName());
+            }else {
+                user.setName("Ник можно изменить в л/с бота");
+            }
         }
         messageInvoker.process(message, user, bot);
         userService.saveUser(user);
     }
+
 }
