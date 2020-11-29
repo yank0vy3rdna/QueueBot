@@ -26,16 +26,8 @@ public class Queue extends IdBaseEntity {
     private QueueStatus status;
 
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(name = "queue_users",
-            joinColumns = @JoinColumn(name = "id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private List<User> queue_users;
-
-    @PreRemove
-    public void removePositions() {
-        queue_users.forEach(user -> user.getQueues().remove(this));
-    }
+    @OneToMany(mappedBy = "queue",cascade = {CascadeType.ALL})
+    private List<QueueUser> queue_users;
 
     @ManyToOne(cascade = { CascadeType.MERGE }, fetch = FetchType.EAGER)
     @JoinColumn(name = "group_id", referencedColumnName = "id")

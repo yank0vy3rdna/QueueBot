@@ -13,7 +13,7 @@ import java.util.List;
 @Table(name = "users")
 @AllArgsConstructor
 @NoArgsConstructor
-public class User extends TgUserBaseEntity{
+public class User extends TgUserBaseEntity {
     @Column(name = "name")
     private String name;
     @Column(name = "bot_state")
@@ -21,7 +21,6 @@ public class User extends TgUserBaseEntity{
     @Column(name = "message_id")
     private Integer messageId;
 
-    @ManyToMany(mappedBy = "queue_users")
-    List<Queue> queues;
-
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.ALL})
+    private List<QueueUser> queue_users;
 }

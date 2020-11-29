@@ -9,6 +9,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.bez_createha.queue_bot.Bot;
 import ru.bez_createha.queue_bot.context.UserContext;
 import ru.bez_createha.queue_bot.model.Queue;
+import ru.bez_createha.queue_bot.model.QueueUser;
 import ru.bez_createha.queue_bot.model.State;
 import ru.bez_createha.queue_bot.model.User;
 import ru.bez_createha.queue_bot.services.QueueService;
@@ -49,9 +50,9 @@ public class ResultMenu implements CallbackCommand{
 
         if (!queue.getQueue_users().isEmpty()) {
             stringBuilder.append("\n\nОчередь ").append(queue.getTag()).append(":\n");
-            for (User user_in_queue : queue.getQueue_users()) {
+            for (QueueUser queueUser : queue.getQueue_users()) {
                 stringBuilder.append("\n");
-                stringBuilder.append(user_in_queue.getName());
+                stringBuilder.append(queueUser.getUser().getName());
             }
         }else {
             stringBuilder.append("Очередь пуста");

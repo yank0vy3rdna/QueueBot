@@ -134,7 +134,7 @@ public class SaveTime implements MessageCommand {
         Integer current_month = Calendar.getInstance().get(Calendar.MONTH) + 1;
         Integer current_year = Calendar.getInstance().get(Calendar.YEAR);
         Integer current_hour = Calendar.getInstance().get(Calendar.HOUR);
-        Integer current_minute = Calendar.getInstance().get(Calendar.MINUTE) + 15;
+        Integer current_minute = Calendar.getInstance().get(Calendar.MINUTE);
 
         Date chosenHourseAndMinutes = new Date();
         Date tempHourseAndMinutes = new Date();

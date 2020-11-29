@@ -46,8 +46,6 @@ public class GroupView implements MessageCommand {
     }
 
     public void process(Message message, User user, Bot bot) throws TelegramApiException {
-
-
         userContext.clearContext(user.getUserId());
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
