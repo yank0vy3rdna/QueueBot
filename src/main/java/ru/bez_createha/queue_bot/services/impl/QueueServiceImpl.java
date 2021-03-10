@@ -1,5 +1,6 @@
 package ru.bez_createha.queue_bot.services.impl;
 
+import ru.bez_createha.queue_bot.context.UserContext;
 import ru.bez_createha.queue_bot.dao.QueueRepository;
 import ru.bez_createha.queue_bot.dao.QueueUserRepository;
 import ru.bez_createha.queue_bot.model.*;
@@ -16,12 +17,14 @@ public class QueueServiceImpl implements QueueService {
     private final QueueRepository queueRepository;
     private final GroupService groupService;
     private final QueueUserRepository queueUserRepository;
+    private final UserContext userContext;
 
     @Autowired
-    public QueueServiceImpl(QueueRepository queueRepository, GroupService groupService, QueueUserRepository queueUserRepository) {
+    public QueueServiceImpl(QueueRepository queueRepository, GroupService groupService, QueueUserRepository queueUserRepository, UserContext userContext) {
         this.queueRepository = queueRepository;
         this.groupService = groupService;
         this.queueUserRepository = queueUserRepository;
+        this.userContext = userContext;
     }
 
     @Override
@@ -73,5 +76,11 @@ public class QueueServiceImpl implements QueueService {
     public void delete(Queue queue) {
         queueUserRepository.deleteAll(queue.getQueue_users());
         queueRepository.delete(queue);
+    }
+
+    @Override
+    public void deleteCurrentQueue(User user) {
+        Queue queue = userContext.getUserStaff(user.getUserId()).getQueue();
+
     }
 }

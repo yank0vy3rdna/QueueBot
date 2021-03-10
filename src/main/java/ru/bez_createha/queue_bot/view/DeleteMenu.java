@@ -21,16 +21,14 @@ import java.util.List;
 import java.util.function.Predicate;
 
 @Component
-public class DeleteMenu implements CallbackCommand{
+public class DeleteMenu implements CallbackCommand {
 
     private final QueueService queueService;
     private final InlineButton telegramUtil;
-    private final UserContext userContext;
 
-    public DeleteMenu(QueueService queueService, InlineButton telegramUtil, UserContext userContext) {
+    public DeleteMenu(QueueService queueService, InlineButton telegramUtil) {
         this.queueService = queueService;
         this.telegramUtil = telegramUtil;
-        this.userContext = userContext;
     }
 
     @Override
@@ -46,10 +44,7 @@ public class DeleteMenu implements CallbackCommand{
     @Override
     public void process(CallbackQuery callbackQuery, User user, Bot bot) throws TelegramApiException {
         user.setBotState(State.QUEUE_MENU_DELETE.toString());
-
-        Queue queue = userContext.getUserStaff(user.getUserId()).getQueue();
-        queueService.delete(queue);
-
+        queueService.deleteCurrentQueue(user);
 
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
 

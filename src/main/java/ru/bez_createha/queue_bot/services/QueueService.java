@@ -15,4 +15,5 @@ public interface QueueService {
     void removeUser(Queue queue, User user);
     void save(Queue queue);
     void delete(Queue queue);
+    void deleteCurrentQueue(User user);
 }
