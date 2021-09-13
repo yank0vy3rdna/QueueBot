@@ -5,6 +5,7 @@ import ru.bez_createha.queue_bot.model.Queue;
 import ru.bez_createha.queue_bot.model.QueueStatus;
 import ru.bez_createha.queue_bot.model.User;
 
+import java.util.Date;
 import java.util.List;
 
 public interface QueueService {
@@ -16,4 +17,5 @@ public interface QueueService {
     void save(Queue queue);
     void delete(Queue queue);
     void deleteCurrentQueue(User user);
+    Date getDateByUserAndQueue(User user, Queue queue);
 }

@@ -6,9 +6,12 @@ import ru.bez_createha.queue_bot.model.Queue;
 import ru.bez_createha.queue_bot.model.QueueUser;
 import ru.bez_createha.queue_bot.model.User;
 
+import java.util.Date;
 import java.util.List;
 
 public interface QueueUserRepository extends JpaRepository<QueueUser, Long> {
     List<QueueUser> findAllByQueueOrderByDate(Queue queue);
     List<QueueUser> findAllByUser(User user);
+
+    Date findByUserAndQueue(User user, Queue queue);
 }

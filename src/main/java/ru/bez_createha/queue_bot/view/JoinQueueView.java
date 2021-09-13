@@ -1,6 +1,7 @@
 package ru.bez_createha.queue_bot.view;
 
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -15,6 +16,7 @@ import ru.bez_createha.queue_bot.services.QueueService;
 import ru.bez_createha.queue_bot.utils.InlineButton;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.function.Predicate;
 
 @Component
@@ -39,6 +41,13 @@ public class JoinQueueView implements CallbackCommand {
         return callbackQuery -> callbackQuery.getData().split("::")[0].equals("join_queue");
     }
 
+    private AnswerCallbackQuery bttnOnClickCallback(CallbackQuery callbackQuery, String text) {
+        AnswerCallbackQuery answer = new AnswerCallbackQuery();
+        answer.setCallbackQueryId(callbackQuery.getId());
+        answer.setText(text);
+        return answer;
+    }
+
     @Override
     public void process(CallbackQuery callbackQuery, User user, Bot bot) throws TelegramApiException {
 
@@ -54,7 +63,18 @@ public class JoinQueueView implements CallbackCommand {
                 )) {
                     queueService.putUser(queue, user);
                 } else {
-                    queueService.removeUser(queue, user);
+                    Date checkInTime = queueService.getDateByUserAndQueue(user,queue);
+                    Date currentTime = new Date();
+
+                    long seconds =  (currentTime.getTime() - checkInTime.getTime()) / 1000;
+
+                    if (seconds > 20){
+                        queueService.removeUser(queue, user);
+
+                    } else {
+                        bot.execute(bttnOnClickCallback(callbackQuery,"Отписать можно только спустя "+(20 - seconds)));
+                    }
+
                 }
                 queue = queueService.getById(queue_id);
                 buildResponse(callbackQuery, queue, editMessageText);

@@ -9,6 +9,7 @@ import ru.bez_createha.queue_bot.services.QueueService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -82,5 +83,10 @@ public class QueueServiceImpl implements QueueService {
     public void deleteCurrentQueue(User user) {
         Queue queue = userContext.getUserStaff(user.getUserId()).getQueue();
 
+    }
+
+    @Override
+    public Date getDateByUserAndQueue(User user, Queue queue) {
+        return queueUserRepository.findByUserAndQueue(user,queue);
     }
 }
