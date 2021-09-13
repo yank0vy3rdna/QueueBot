@@ -45,6 +45,7 @@ public class JoinQueueView implements CallbackCommand {
         AnswerCallbackQuery answer = new AnswerCallbackQuery();
         answer.setCallbackQueryId(callbackQuery.getId());
         answer.setText(text);
+        answer.setShowAlert(true);
         return answer;
     }
 
@@ -70,7 +71,6 @@ public class JoinQueueView implements CallbackCommand {
 
                     if (seconds > 20){
                         queueService.removeUser(queue, user);
-
                     } else {
                         bot.execute(bttnOnClickCallback(callbackQuery,"Отписать можно только спустя "+(20 - seconds)));
                     }
