@@ -13,5 +13,5 @@ public interface QueueUserRepository extends JpaRepository<QueueUser, Long> {
     List<QueueUser> findAllByQueueOrderByDate(Queue queue);
     List<QueueUser> findAllByUser(User user);
 
-    Date findByUserAndQueue(User user, Queue queue);
+    QueueUser findByUserAndQueue(User user, Queue queue);
 }

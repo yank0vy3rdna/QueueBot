@@ -87,6 +87,6 @@ public class QueueServiceImpl implements QueueService {
 
     @Override
     public Date getDateByUserAndQueue(User user, Queue queue) {
-        return queueUserRepository.findByUserAndQueue(user,queue);
+        return queueUserRepository.findByUserAndQueue(user,queue).getDate();
     }
 }
