@@ -82,6 +82,7 @@ public class QueueServiceImpl implements QueueService {
     @Override
     public void deleteCurrentQueue(User user) {
         Queue queue = userContext.getUserStaff(user.getUserId()).getQueue();
+        delete(queue);
 
     }
 
